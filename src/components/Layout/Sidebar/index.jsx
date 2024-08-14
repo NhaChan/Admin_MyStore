@@ -3,34 +3,19 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 import { Flex, Menu } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { BankTwoTone } from '@ant-design/icons'
 import { navigateItems } from '../../../routes'
 
-// function getItem(label, key, icon, children) {
-//   return {
-//     key,
-//     icon,
-//     children,
-//     label,
-//   }
-// }
-// const items = [
-//   getItem('Home', '1', <PieChartOutlined />),
-//   getItem('Products', '2', <DesktopOutlined />),
-//   getItem('User', 'sub1', <UserOutlined />, [
-//     getItem('Tom', '3'),
-//     getItem('Bill', '4'),
-//     getItem('Alex', '5'),
-//   ]),
-//   getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-//   getItem('Logout', '9', <LogoutOutlined />),
-// ]
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
   const [navItems, setNaviItems] = useState(navigateItems)
+  const location = useLocation()
+
+  const regex = location.pathname.match(/^\/[^/]+/)?.at(0) ?? '/'
+  const [navSelected, setNavSelected] = useState(regex)
 
   const handleMenuClick = ({ key }) => navigate(key)
 
@@ -41,7 +26,8 @@ const Sidebar = () => {
 
   useLayoutEffect(() => {
     setNaviItems(navigateItems)
-  }, [])
+    setNavSelected(regex)
+  }, [regex])
 
   return (
     <>
@@ -50,14 +36,15 @@ const Sidebar = () => {
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
-        style={{ position:'sticky'}}
+        style={{ position: 'sticky' }}
       >
         <Flex className="text-center justify-center text-2xl p-10">
           <BankTwoTone />
         </Flex>
         <Menu
           theme="dark"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={[navSelected]}
+          selectedKeys={navSelected}
           mode="inline"
           items={navItems}
           onClick={handleMenuClick}
