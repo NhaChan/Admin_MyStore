@@ -1,6 +1,6 @@
 import React from 'react'
 import Sidebar from '../Sidebar'
-import { Breadcrumb, Layout } from 'antd'
+import { App, Layout } from 'antd'
 import Header from '../Header'
 import Footer from '../Footer'
 import { Content } from 'antd/es/layout/layout'
@@ -8,36 +8,16 @@ import { Content } from 'antd/es/layout/layout'
 const DefaultLayout = ({ children }) => {
   return (
     <div>
-      <Layout>
-        <Sidebar />
+      <App notification={{ duration: 3, showProgress: true }}>
         <Layout>
-          <Header />
-          <Content
-            style={{
-              margin: '0 16px',
-            }}
-          >
-            <Breadcrumb
-              style={{
-                margin: '16px 0',
-              }}
-            >
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-              }}
-              className="bg-white rounded-lg"
-            >
-              {children}
-            </div>
-          </Content>
-          <Footer />
+          <Sidebar />
+          <Layout>
+            <Header />
+            <Content className="m-4 p-4 drop-shadow rounded-lg bg-white">{children}</Content>
+            <Footer />
+          </Layout>
         </Layout>
-      </Layout>
+      </App>
     </div>
   )
 }

@@ -5,17 +5,17 @@ import React from 'react'
 const Home = () => {
   return (
     <>
-      <div class="grid grid-cols-4 gap-4">
-          <Card bordered={false} className='drop-shadow'>
-            <Statistic
-              title="Active"
-              value={11.28}
-              precision={2}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
-              suffix="%"
-            />
-          </Card>
+      <div className="grid grid-cols-4 gap-4">
+        <Card bordered={false} className="drop-shadow">
+          <Statistic
+            title="Active"
+            value={11.28}
+            precision={2}
+            valueStyle={{ color: '#3f8600' }}
+            prefix={<ArrowUpOutlined />}
+            suffix="%"
+          />
+        </Card>
         <div>
           <Card bordered={false}>
             <Statistic
