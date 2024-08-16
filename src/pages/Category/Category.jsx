@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { App, Button, Flex, Form, Input, Popconfirm, Spin, Table, Tooltip } from 'antd'
-import categoryService from '../../services/categoryService'
+import categoryService from '../../services/products/categoryService'
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
 import { showError } from '../../services/common'
@@ -119,9 +119,6 @@ const Category = () => {
       await categoryService.deleteCategory(id)
       const newData = data.filter((item) => !(item.id === id))
       setData(newData)
-      notification.success({
-        message: 'Xóa thành công',
-      })
     } catch (error) {
       showError(error)
     } finally {

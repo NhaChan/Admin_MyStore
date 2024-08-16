@@ -10,22 +10,22 @@ import Login from '../pages/Login'
 import Category from '../pages/Category'
 
 export const navigateItems = [
-  { key: '/', icon: <PieChartOutlined />, label: 'Home' },
-  { key: '/users', icon: <UserOutlined />, label: 'Users' },
-  { key: '/products', icon: <DesktopOutlined />, label: 'Products' },
+  { key: '/', icon: <PieChartOutlined />, label: 'Thống kê' },
+  { key: '/users', icon: <UserOutlined />, label: 'Người dùng' },
+  { key: '/products', icon: <DesktopOutlined />, label: 'Sản phẩm' },
   {
     key: '1',
-    label: 'Products Type',
+    label: 'Sản Phẩm',
     icon: <TeamOutlined />,
     children: [
-      { key: '/brands', label: 'Brands' },
-      { key: '/categories', label: 'Categories' },
+      { key: '/brands', label: 'Thương hiệu' },
+      { key: '/categories', label: 'Danh mục' },
     ],
   },
-  { key: '/suppliers', icon: <UserOutlined />, label: 'Suppliers' },
-  { key: '/orders', icon: <UserOutlined />, label: 'Orders' },
-  { key: '/staffs', icon: <UserOutlined />, label: 'Staffs' },
-  { key: '/comments', icon: <UserOutlined />, label: 'Comments' },
+  { key: '/suppliers', icon: <UserOutlined />, label: 'Nhà cung cấp' },
+  { key: '/orders', icon: <UserOutlined />, label: 'Đơn đặt hàng' },
+  { key: '/staffs', icon: <UserOutlined />, label: 'Nhân viên' },
+  { key: '/comments', icon: <UserOutlined />, label: 'Bình luận' },
 ]
 
 export const publicRoutes = [

@@ -14,3 +14,5 @@ export const showError = (error) => {
     description: errorMessage,
   })
 }
+
+export const toImageSrc = (url) => API_URL + '/' + url
