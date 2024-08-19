@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { BankTwoTone } from '@ant-design/icons'
 import { navigateItems } from '../../../routes'
 
-
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
@@ -34,6 +33,8 @@ const Sidebar = () => {
       <Sider
         className="h-screen top-0"
         collapsible
+        breakpoint="md"
+        onBreakpoint={() => setCollapsed(false)}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         style={{ position: 'sticky' }}

@@ -10,7 +10,7 @@ const UserBot = () => {
     {
       title: 'Người dùng',
       dataIndex: 'fullName',
-      sorter: (a, b) => a.fullName.localeCompare(),
+      sorter: (a, b) => a.fullName.localeCompare(b.fullName),
     },
     {
       title: 'Email',
@@ -20,11 +20,6 @@ const UserBot = () => {
       title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
     },
-    // {
-    //   title: 'Email',
-    //   dataIndex: 'email',
-    //   sorter: (a, b) => a.botTradingId - b.botTradingId,
-    // },
   ]
 
   useEffect(() => {
@@ -32,7 +27,7 @@ const UserBot = () => {
     userService
       .getAllUser()
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setData(res.data.items)
       })
       .catch((err) => {

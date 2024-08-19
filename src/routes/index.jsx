@@ -8,6 +8,8 @@ import Users from '../pages/Users'
 import Brands from '../pages/Brands'
 import Login from '../pages/Login'
 import Category from '../pages/Category'
+import ProductAdd from '../pages/Products/ProductAdd'
+import ProductDetail from '../pages/Products/ProductDetail'
 
 export const navigateItems = [
   { key: '/', icon: <PieChartOutlined />, label: 'Thống kê' },
@@ -32,6 +34,8 @@ export const publicRoutes = [
   { path: '/', component: Home },
   { path: '/users', component: Users },
   { path: '/products', component: Products },
+  { path: '/add-products', component: ProductAdd },
+  { path: '/product-detail/:id', component: ProductDetail },
   { path: '/brands', component: Brands },
   { path: '/categories', component: Category },
   { path: '/suppliers', component: Users },

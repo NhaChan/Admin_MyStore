@@ -13,7 +13,7 @@ import {
   Upload,
 } from 'antd'
 import brandService from '../../services/products/brandService'
-import { showError, toImageLink, toImageSrc } from '../../services/common'
+import { showError, toImageLink, toImageSrc } from '../../services/commonService'
 import { DeleteTwoTone, EditTwoTone, UploadOutlined } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
 
@@ -95,7 +95,6 @@ const Brands = () => {
         console.log(filelist)
         Object.keys(data).forEach((key) => formData.append(key, data[key]))
         const res = await brandService.addBrand(formData)
-        console.log(...brands)
         setBrands([...brands, res.data])
         setUpdate(!update)
         setIsUpdate(false)

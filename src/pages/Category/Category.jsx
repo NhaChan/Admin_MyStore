@@ -3,7 +3,7 @@ import { App, Button, Flex, Form, Input, Popconfirm, Spin, Table, Tooltip } from
 import categoryService from '../../services/products/categoryService'
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
-import { showError } from '../../services/common'
+import { showError } from '../../services/commonService'
 
 const Category = () => {
   const { notification } = App.useApp()
@@ -60,6 +60,7 @@ const Category = () => {
       setIsLoading(true)
       try {
         const res = await categoryService.getAllCategory()
+        // console.log(res.data)
         setData(res.data)
       } catch (error) {
         showError(error)
