@@ -1,67 +1,88 @@
-import { Button, Form, Input, Spin, message } from 'antd'
+import { Button, Form, Input, notification, Spin } from 'antd'
 import React, { useState } from 'react'
+import { LockOutlined, MailOutlined } from '@ant-design/icons'
+// import logo from '../../services/logo.png'
+import { showError } from '../../services/commonService'
 import authService from '../../services/authService'
 import { useNavigate } from 'react-router-dom'
+import authActions from '../../services/authAction'
+import { useAuth } from '../../App'
 
 const Login = () => {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const [form] = Form.useForm()
+  const { dispatch } = useAuth()
 
-  const handleSubmit = () => {
-    setLoading(true)
-    authService
-      .login(form.getFieldsValue())
-      .then((res) => {
-        console.log(res)
-        message.success('Đăng nhập thành công!')
-        navigate('/')
-
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false))
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      const data = form.getFieldsValue()
+      const res = await authService.login(data)
+      if (res.data?.roles?.includes('Admin')) {
+        dispatch(authActions.LOGIN(res.data?.roles))
+        notification.success({ message: 'Đăng nhập thành công.' })
+        navigate('/home')
+      }
+    } catch (error) {
+      showError(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-srceen">
-      <div className="w-full max-w-md border-2 p-4 rounded">
-        <img
-          src="https://i.pinimg.com/564x/a6/7f/1c/a67f1c3af525e6044f582cc0f8e01e59.jpg"
-          alt=""
-          className="w-min mb-5 rounded-md"
-        />
-        <Form disabled={loading} form={form} onFinish={handleSubmit}>
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your username!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item className="flex justify-center">
-            <Button type="primary" htmlType="submit">
+    <div className="flex items-center justify-center min-h-screen bg-blue-200">
+      <div className="w-11/12 md:w-3/5 lg:w-2/5 space-y-4 px-10 py-14 bg-white shadow-lg rounded-lg overflow-hidden">
+        <>
+          <h2 className="text-3xl font-bold text-center mb-6 text-indigo-600">
+            {' '}
+            <img src="/logo.png" alt="logo" className="w-80 mx-auto" />
+          </h2>
+          <Form form={form} disabled={loading} onFinish={handleSubmit}>
+            <Form.Item
+              // label="Email"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập email!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<MailOutlined className="text-gray-300 mx-1" />}
+                placeholder="Email"
+                size="large"
+                className="text-gray-600"
+              />
+            </Form.Item>
+            <Form.Item
+              // label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu',
+                },
+              ]}
+            >
+              <Input.Password
+                size="large"
+                placeholder="Mật khẩu"
+                prefix={<LockOutlined className="text-gray-300 mx-1" />}
+              />
+            </Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              className="w-full px-4  text-white bg-blue-700 rounded-3xl hover:bg-blue-600 "
+            >
               {loading ? <Spin /> : 'Đăng nhập'}
             </Button>
-          </Form.Item>
-        </Form>
+          </Form>
+        </>
       </div>
     </div>
   )

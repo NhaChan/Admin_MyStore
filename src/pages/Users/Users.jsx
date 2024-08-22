@@ -20,6 +20,11 @@ const UserBot = () => {
       title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
     },
+    {
+      title: 'Quyền',
+      dataIndex: 'roles',
+      render: (roles) => roles.join(', '),
+    },
   ]
 
   useEffect(() => {
@@ -27,7 +32,7 @@ const UserBot = () => {
     userService
       .getAllUser()
       .then((res) => {
-        // console.log(res.data)
+        console.log(res.data)
         setData(res.data.items)
       })
       .catch((err) => {
