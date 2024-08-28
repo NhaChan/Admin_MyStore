@@ -41,3 +41,4 @@ export const formatVND = (value) => {
   return format.format(value)
 }
 
+export const formatDateTime = (date) => new Date(date).toLocaleString('vi-VN')

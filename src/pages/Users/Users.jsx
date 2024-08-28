@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from 'antd'
+import { Input, Pagination, Table } from 'antd'
 import userService from '../../services/userService'
+import { formatDateTime, showError } from '../../services/commonService'
 
 const UserBot = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [totalItems, setTotalItems] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPageSize, setCurrentPageSize] = useState(10)
+  const [search, setSearch] = useState('')
 
   const columns = [
     {
@@ -25,30 +31,72 @@ const UserBot = () => {
       dataIndex: 'roles',
       render: (roles) => roles.join(', '),
     },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      render: (value) => value !== null && formatDateTime(value),
+    },
+    {
+      title: 'Ngày cập nhật',
+      dataIndex: 'updatedAt',
+      sorter: (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt),
+      render: (value) => value !== null && formatDateTime(value),
+    },
   ]
 
+  const handleSearch = (key) => key && key !== search && setSearch(key)
+
   useEffect(() => {
-    setIsLoading(true)
+    search ? setSearchLoading(true) : setIsLoading(true)
     userService
-      .getAllUser()
+      .getAllUser(currentPage, currentPageSize, search)
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setData(res.data.items)
+        setTotalItems(res.data?.totalItems)
       })
       .catch((err) => {
-        console.log(err)
+        showError(err)
       })
-      .finally(() => setIsLoading(false))
-  }, [])
+      .finally(() => {
+        setSearchLoading(false)
+        setIsLoading(false)
+      })
+  }, [currentPage, currentPageSize, search])
 
   return (
-    <Table
-      loading={isLoading}
-      columns={columns}
-      dataSource={data}
-      rowKey={(record) => record.id}
-      className="overflow-x-auto"
-    />
+    <div className="space-y-4">
+      <Input.Search
+        loading={searchLoading}
+        className="w-1/3"
+        size="large"
+        allowClear
+        onSearch={(key) => handleSearch(key)}
+        onChange={(e) => e.target.value === '' && setSearch('')}
+      />
+
+      <Table
+        pagination={false}
+        loading={isLoading}
+        columns={columns}
+        dataSource={data}
+        rowKey={(record) => record.id}
+        className="overflow-x-auto"
+      />
+      <Pagination
+        align="end"
+        hideOnSinglePage
+        showSizeChanger
+        defaultCurrent={currentPage}
+        defaultPageSize={currentPageSize}
+        total={totalItems}
+        onChange={(newPage, newPageSize) => {
+          setCurrentPage(newPage)
+          setCurrentPageSize(newPageSize)
+        }}
+      />
+    </div>
   )
 }
 

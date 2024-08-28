@@ -1,7 +1,6 @@
 import { Button, Form, Input, notification, Spin } from 'antd'
 import React, { useState } from 'react'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
-// import logo from '../../services/logo.png'
 import { showError } from '../../services/commonService'
 import authService from '../../services/authService'
 import { useNavigate } from 'react-router-dom'

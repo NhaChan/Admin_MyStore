@@ -1,10 +1,19 @@
 import axios from 'axios'
 import brandService from './brandService'
 import categoryService from './categoryService'
+import { authHeader, authImageHeader } from '../authHeader'
 
 const API_URL = process.env.REACT_APP_BASE_URL + '/api/products'
 
-const getAll = async () => await axios.get(API_URL)
+const getAll = async (page, pageSize, search) =>
+  await axios.get(API_URL, {
+    headers: authHeader(),
+    params: {
+      page: page,
+      pageSize: pageSize,
+      search: search ?? '',
+    },
+  })
 
 const getById = async (id, data) => await axios.get(API_URL + `/get/${id}`, data)
 
@@ -22,11 +31,14 @@ const fetchProductAttributes = async () => {
   }
 }
 
-const addProduct = async (data) => await axios.post(API_URL + '/create', data)
+const addProduct = async (data) =>
+  await axios.post(API_URL + '/create', data, { headers: authImageHeader() })
 
-const updateProduct = async (id, data) => await axios.put(API_URL + `/update/${id}`, data)
+const updateProduct = async (id, data) =>
+  await axios.put(API_URL + `/update/${id}`, data, { headers: authImageHeader() })
 
-const deleteProduct = async (id) => await axios.delete(API_URL + `/delete/${id}`)
+const deleteProduct = async (id) =>
+  await axios.delete(API_URL + `/delete/${id}`, { headers: authHeader() })
 
 const productService = {
   getAll,

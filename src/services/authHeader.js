@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const authHeader = () => {
+export const authHeader = () => {
   const token = Cookies.get('access_token_admin')
   if (token) {
     return {
@@ -9,4 +9,12 @@ const authHeader = () => {
   } else return {}
 }
 
-export default authHeader
+export const authImageHeader = () => {
+  const token = Cookies.get('access_token_admin')
+  if (token) {
+    return {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'multipart/form-data',
+    }
+  } else return {}
+}

@@ -95,7 +95,7 @@ const ProductDetail = () => {
       setUpdate(false)
       form.resetFields()
       setFileList([])
-      navigation('/products')
+      navigation(-1)
     } catch (error) {
       showError(error)
     } finally {

@@ -1,10 +1,9 @@
 // import Sider from 'antd/es/layout/Sider';
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 
-import { Flex, Menu } from 'antd'
+import { Menu } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { BankTwoTone } from '@ant-design/icons'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { navigateItems } from '../../../routes'
 
 const Sidebar = () => {
@@ -39,9 +38,11 @@ const Sidebar = () => {
         onCollapse={(value) => setCollapsed(value)}
         style={{ position: 'sticky' }}
       >
-        <Flex className="text-center justify-center text-2xl p-10">
-          <BankTwoTone />
-        </Flex>
+        <div>
+          <Link to="/home">
+            <img src="/logo.png" alt="logo" className="w-52 mx-auto" />
+          </Link>
+        </div>
         <Menu
           theme="dark"
           defaultSelectedKeys={[navSelected]}

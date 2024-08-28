@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Image, notification, Popconfirm, Table } from 'antd'
+import { Button, Flex, Image, Input, notification, Pagination, Popconfirm, Table } from 'antd'
 import { formatVND, showError, toImageLink } from '../../services/commonService'
 import productService from '../../services/products/productService'
-import { Link } from 'react-router-dom'
-import { DeleteTwoTone } from '@ant-design/icons'
+import { Link, useSearchParams } from 'react-router-dom'
+import { DeleteTwoTone, PlusOutlined } from '@ant-design/icons'
 
 const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState([])
   const [loadingDelete, setLoadingDelete] = useState(false)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [totalItems, setTotalItems] = useState(0)
+  const [currentPage, setCurrentPage] = useState(searchParams.get('page') ?? 1)
+  const [currentPageSize, setCurrentPageSize] = useState(5)
+  const [search, setSearch] = useState('')
 
   const columns = [
     {
@@ -19,7 +25,7 @@ const Products = () => {
     {
       title: 'Hình ảnh',
       dataIndex: 'imageUrl',
-      render: (value) => <Image rootClassName="w-20 h-20" src={toImageLink(value)} />,
+      render: (value) => <Image style={{ maxWidth: 100, minWidth: 50 }} src={toImageLink(value)} />,
     },
     {
       title: 'Giá',
@@ -64,21 +70,25 @@ const Products = () => {
     },
   ]
 
+  const handleSearch = (key) => key && key !== search && setSearch(key)
+
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
+      search ? setSearchLoading(true) : setIsLoading(true)
       try {
-        const res = await productService.getAll()
+        const res = await productService.getAll(currentPage, currentPageSize, search)
         // console.log('product', res.data)
         setData(res.data.items)
+        setTotalItems(res.data?.totalItems)
       } catch (error) {
         showError(error)
       } finally {
         setIsLoading(false)
+        setSearchLoading(false)
       }
     }
     fetchData()
-  }, [])
+  }, [currentPage, currentPageSize, search])
 
   const handleDelete = async (id) => {
     setLoadingDelete(true)
@@ -97,13 +107,25 @@ const Products = () => {
   }
 
   return (
-    <>
-      <Link to="/add-products">
-        <Button className="p-4 mb-4" type="primary">
-          Thêm sản phẩm
-        </Button>
-      </Link>
+    <div className="space-y-4">
+      <div className="w-full flex justify-between items-center">
+        <Input.Search
+          loading={searchLoading}
+          className="w-1/2"
+          size="large"
+          allowClear
+          onSearch={(key) => handleSearch(key)}
+          onChange={(e) => e.target.value === '' && setSearch('')}
+          placeholder="Tìm kiếm"
+        />
+        <Link to="/add-products">
+          <Button size="large" type="primary">
+            <PlusOutlined /> Thêm sản phẩm
+          </Button>
+        </Link>
+      </div>
       <Table
+        pagination={false}
         showSorterTooltip={false}
         loading={isLoading}
         columns={columns}
@@ -111,7 +133,20 @@ const Products = () => {
         rowKey={(record) => record.id}
         className="overflow-x-auto"
       />
-    </>
+      <Pagination
+        align="end"
+        hideOnSinglePage
+        showSizeChanger
+        defaultCurrent={currentPage}
+        defaultPageSize={currentPageSize}
+        total={totalItems}
+        onChange={(newPage, newPageSize) => {
+          setCurrentPage(newPage)
+          setCurrentPageSize(newPageSize)
+          setSearchParams(`page=${newPage}`)
+        }}
+      />
+    </div>
   )
 }
 

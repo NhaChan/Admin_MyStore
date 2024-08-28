@@ -2,8 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import { generatePrivateRoutes, generatePublicRoutes } from './routes'
 import NotFound from './components/NotFound'
-import { createContext, useContext, useEffect, useReducer } from 'react'
-import authService from './services/authService'
+import { createContext, useContext, useReducer } from 'react'
 import { initialState, reducer } from './services/authReducer'
 
 const AuthContext = createContext()

@@ -1,13 +1,14 @@
 import React from 'react'
 import Sidebar from '../Sidebar'
-import { App, Layout } from 'antd'
+import { App, ConfigProvider, Layout } from 'antd'
 import Header from '../Header'
 import Footer from '../Footer'
 import { Content } from 'antd/es/layout/layout'
+import viVN from 'antd/locale/vi_VN'
 
 const DefaultLayout = ({ children }) => {
   return (
-    <div>
+    <ConfigProvider locale={viVN}>
       <App notification={{ duration: 3, showProgress: true }}>
         <Layout>
           <Sidebar />
@@ -18,7 +19,7 @@ const DefaultLayout = ({ children }) => {
           </Layout>
         </Layout>
       </App>
-    </div>
+    </ConfigProvider>
   )
 }
 
