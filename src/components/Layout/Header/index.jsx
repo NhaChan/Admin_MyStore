@@ -1,12 +1,7 @@
 import { Avatar, Badge, Flex, Popconfirm, Typography } from 'antd'
-import React, { useEffect, useReducer, useState } from 'react'
-import {
-  LogoutOutlined,
-  MessageOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from '@ant-design/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { LogoutOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../App'
 import authService from '../../../services/authService'
 import authActions from '../../../services/authAction'

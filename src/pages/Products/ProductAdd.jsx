@@ -46,7 +46,7 @@ const ProductAdd = () => {
         setLoading(true)
         const res = await productService.fetchProductAttributes()
         Object.keys(res).forEach((key) => (res[key] = dataValueLabel(res[key])))
-        // console.log(res)
+        console.log(res)
         setProductAttributes(res)
       } catch (error) {
         showError(error)

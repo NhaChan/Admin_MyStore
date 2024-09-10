@@ -20,6 +20,7 @@ const Products = () => {
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
+      render: (value) => <div className="truncate w-24 md:w-48">{value}</div>,
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {

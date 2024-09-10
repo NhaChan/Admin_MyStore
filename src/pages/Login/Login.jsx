@@ -22,6 +22,8 @@ const Login = () => {
         dispatch(authActions.LOGIN(res.data?.roles))
         notification.success({ message: 'Đăng nhập thành công.' })
         navigate('/home')
+      } else {
+        notification.error({ message: 'Không có quyền truy cập' })
       }
     } catch (error) {
       showError(error)
