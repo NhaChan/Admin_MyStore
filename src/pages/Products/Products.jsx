@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Image, Input, notification, Pagination, Popconfirm, Table } from 'antd'
+import {
+  Button,
+  Flex,
+  Image,
+  Input,
+  notification,
+  Pagination,
+  Popconfirm,
+  Switch,
+  Table,
+} from 'antd'
 import { formatVND, showError, toImageLink } from '../../services/commonService'
 import productService from '../../services/products/productService'
 import { Link, useSearchParams } from 'react-router-dom'
-import { DeleteTwoTone, PlusOutlined } from '@ant-design/icons'
+import { DeleteTwoTone, HomeTwoTone, PlusOutlined } from '@ant-design/icons'
+import BreadcrumbLink from '../../components/BreadcrumbLink'
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -15,6 +26,16 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(searchParams.get('page') ?? 1)
   const [currentPageSize, setCurrentPageSize] = useState(5)
   const [search, setSearch] = useState('')
+
+  const breadcrumb = [
+    {
+      path: '/',
+      title: <HomeTwoTone />,
+    },
+    {
+      title: 'Sản phẩm',
+    },
+  ]
 
   const columns = [
     {
@@ -51,7 +72,25 @@ const Products = () => {
       dataIndex: 'brandName',
     },
     {
+      title: 'Còn bán',
+      dataIndex: 'enable',
+      render: (value, record) => (
+        <Switch
+          // checkedChildren={<CheckOutlined />}
+          // unCheckedChildren={<CloseOutlined />}
+          defaultChecked={value}
+          onChange={(value) => handleChangeEnable(record.id, value)}
+        />
+      ),
+      filters: [
+        { text: 'Còn bán', value: true },
+        { text: 'Ngưng bán', value: false },
+      ],
+      onFilter: (value, record) => record.enable === value,
+    },
+    {
       title: 'Thực hiện',
+      align: 'center',
       render: (_, record) => (
         <Flex justify="center" align="center" className="space-x-1">
           <Link to={`/product-detail/${record.id}`}>
@@ -78,7 +117,7 @@ const Products = () => {
       search ? setSearchLoading(true) : setIsLoading(true)
       try {
         const res = await productService.getAll(currentPage, currentPageSize, search)
-        // console.log('product', res.data)
+        console.log('product', res.data)
         setData(res.data.items)
         setTotalItems(res.data?.totalItems)
       } catch (error) {
@@ -90,6 +129,16 @@ const Products = () => {
     }
     fetchData()
   }, [currentPage, currentPageSize, search])
+
+  const handleChangeEnable = async (id, value) => {
+    try {
+      const data = { enable: value }
+      await productService.updateEnable(id, data)
+      notification.success({ message: 'cập nhật thành công.' })
+    } catch (error) {
+      showError(error)
+    }
+  }
 
   const handleDelete = async (id) => {
     setLoadingDelete(true)
@@ -109,44 +158,47 @@ const Products = () => {
 
   return (
     <div className="space-y-4">
-      <div className="w-full flex justify-between items-center">
-        <Input.Search
-          loading={searchLoading}
-          className="w-1/2"
-          size="large"
-          allowClear
-          onSearch={(key) => handleSearch(key)}
-          onChange={(e) => e.target.value === '' && setSearch('')}
-          placeholder="Tìm kiếm"
+      <BreadcrumbLink breadcrumb={breadcrumb} />
+      <div className="p-4 drop-shadow rounded-lg bg-white space-y-2">
+        <div className="w-full flex justify-between items-center">
+          <Input.Search
+            loading={searchLoading}
+            className="w-1/2"
+            size="large"
+            allowClear
+            onSearch={(key) => handleSearch(key)}
+            onChange={(e) => e.target.value === '' && setSearch('')}
+            placeholder="Tìm kiếm"
+          />
+          <Link to="/add-products">
+            <Button size="large" type="primary">
+              <PlusOutlined /> Thêm sản phẩm
+            </Button>
+          </Link>
+        </div>
+        <Table
+          pagination={false}
+          showSorterTooltip={false}
+          loading={isLoading}
+          columns={columns}
+          dataSource={data}
+          rowKey={(record) => record.id}
+          className="overflow-x-auto"
         />
-        <Link to="/add-products">
-          <Button size="large" type="primary">
-            <PlusOutlined /> Thêm sản phẩm
-          </Button>
-        </Link>
+        <Pagination
+          align="end"
+          hideOnSinglePage
+          showSizeChanger
+          defaultCurrent={currentPage}
+          defaultPageSize={currentPageSize}
+          total={totalItems}
+          onChange={(newPage, newPageSize) => {
+            setCurrentPage(newPage)
+            setCurrentPageSize(newPageSize)
+            setSearchParams(`page=${newPage}`)
+          }}
+        />
       </div>
-      <Table
-        pagination={false}
-        showSorterTooltip={false}
-        loading={isLoading}
-        columns={columns}
-        dataSource={data}
-        rowKey={(record) => record.id}
-        className="overflow-x-auto"
-      />
-      <Pagination
-        align="end"
-        hideOnSinglePage
-        showSizeChanger
-        defaultCurrent={currentPage}
-        defaultPageSize={currentPageSize}
-        total={totalItems}
-        onChange={(newPage, newPageSize) => {
-          setCurrentPage(newPage)
-          setCurrentPageSize(newPageSize)
-          setSearchParams(`page=${newPage}`)
-        }}
-      />
     </div>
   )
 }

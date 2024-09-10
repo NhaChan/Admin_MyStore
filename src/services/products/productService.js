@@ -40,6 +40,9 @@ const updateProduct = async (id, data) =>
 const deleteProduct = async (id) =>
   await axios.delete(API_URL + `/delete/${id}`, { headers: authHeader() })
 
+const updateEnable = async (id, data) =>
+  await axios.put(API_URL + `/updateEnable/${id}`, data, { headers: authHeader() })
+
 const productService = {
   getAll,
   fetchProductAttributes,
@@ -47,6 +50,7 @@ const productService = {
   getById,
   updateProduct,
   deleteProduct,
+  updateEnable,
 }
 
 export default productService

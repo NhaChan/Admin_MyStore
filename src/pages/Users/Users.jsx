@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Input, Pagination, Table } from 'antd'
 import userService from '../../services/userService'
 import { formatDateTime, showError } from '../../services/commonService'
+import { HomeTwoTone } from '@ant-design/icons'
+import BreadcrumbLink from '../../components/BreadcrumbLink'
 
 const UserBot = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -11,6 +13,16 @@ const UserBot = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentPageSize, setCurrentPageSize] = useState(10)
   const [search, setSearch] = useState('')
+
+  const breadcrumb = [
+    {
+      path: '/',
+      title: <HomeTwoTone />,
+    },
+    {
+      title: 'Người dùng',
+    },
+  ]
 
   const columns = [
     {
@@ -67,35 +79,38 @@ const UserBot = () => {
 
   return (
     <div className="space-y-4">
-      <Input.Search
-        loading={searchLoading}
-        className="w-1/3"
-        size="large"
-        allowClear
-        onSearch={(key) => handleSearch(key)}
-        onChange={(e) => e.target.value === '' && setSearch('')}
-      />
+      <BreadcrumbLink breadcrumb={breadcrumb} />
+      <div className="p-4 drop-shadow rounded-lg bg-white space-y-2">
+        <Input.Search
+          loading={searchLoading}
+          className="w-1/3"
+          size="large"
+          allowClear
+          onSearch={(key) => handleSearch(key)}
+          onChange={(e) => e.target.value === '' && setSearch('')}
+        />
 
-      <Table
-        pagination={false}
-        loading={isLoading}
-        columns={columns}
-        dataSource={data}
-        rowKey={(record) => record.id}
-        className="overflow-x-auto"
-      />
-      <Pagination
-        align="end"
-        hideOnSinglePage
-        showSizeChanger
-        defaultCurrent={currentPage}
-        defaultPageSize={currentPageSize}
-        total={totalItems}
-        onChange={(newPage, newPageSize) => {
-          setCurrentPage(newPage)
-          setCurrentPageSize(newPageSize)
-        }}
-      />
+        <Table
+          pagination={false}
+          loading={isLoading}
+          columns={columns}
+          dataSource={data}
+          rowKey={(record) => record.id}
+          className="overflow-x-auto"
+        />
+        <Pagination
+          align="end"
+          hideOnSinglePage
+          showSizeChanger
+          defaultCurrent={currentPage}
+          defaultPageSize={currentPageSize}
+          total={totalItems}
+          onChange={(newPage, newPageSize) => {
+            setCurrentPage(newPage)
+            setCurrentPageSize(newPageSize)
+          }}
+        />
+      </div>
     </div>
   )
 }

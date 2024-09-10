@@ -14,7 +14,7 @@ const DefaultLayout = ({ children }) => {
           <Sidebar />
           <Layout>
             <Header />
-            <Content className="m-4 p-4 drop-shadow rounded-lg bg-white">{children}</Content>
+            <Content className="p-4">{children}</Content>
             <Footer />
           </Layout>
         </Layout>

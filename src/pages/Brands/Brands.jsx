@@ -14,8 +14,19 @@ import {
 } from 'antd'
 import brandService from '../../services/products/brandService'
 import { showError, toImageLink, toImageSrc } from '../../services/commonService'
-import { DeleteTwoTone, EditTwoTone, UploadOutlined } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, HomeTwoTone, UploadOutlined } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
+import BreadcrumbLink from '../../components/BreadcrumbLink'
+
+const breadcrumb = [
+  {
+    path: '/',
+    title: <HomeTwoTone />,
+  },
+  {
+    title: 'Thương hiệu',
+  },
+]
 
 const Brands = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -183,88 +194,91 @@ const Brands = () => {
   }
 
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-      <div className="h-fit md:col-span-2 bg-white rounded-lg drop-shadow">
-        <Table
-          loading={isLoading}
-          columns={columns(onUpdate)}
-          dataSource={brands}
-          rowKey={(record) => record.id}
-          className="overflow-x-auto"
-        />
-      </div>
-      <div className="h-fit bg-white rounded-lg drop-shadow">
-        <div className="text-xl text-center p-4">Thương hiệu</div>
-        <Form form={form} className="px-4 grid grid-cols-3 gap-2">
-          <label htmlFor="name">Tên thương hiệu:</label>
-          <Form.Item
-            name="name"
-            className="col-span-2"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tên thương hiệu.',
-              },
-            ]}
-          >
-            <Input size="large" />
-          </Form.Item>
-          <label>Hình ảnh:</label>
-          <Form.Item
-            name="imageUrl"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn ảnh.',
-              },
-            ]}
-            getValueFromEvent={(e) => e.fileList}
-          >
-            <Upload
-              name="file"
-              beforeUpload={() => false}
-              listType="picture-circle"
-              fileList={filelist}
-              accept="image/png, image/gif, image/jpeg, image/svg"
-              maxCount={1}
-              onChange={handleFileChange}
+    <div className="space-y-4">
+      <BreadcrumbLink breadcrumb={breadcrumb} />
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+        <div className="h-fit md:col-span-2 bg-white rounded-lg drop-shadow">
+          <Table
+            loading={isLoading}
+            columns={columns(onUpdate)}
+            dataSource={brands}
+            rowKey={(record) => record.id}
+            className="overflow-x-auto"
+          />
+        </div>
+        <div className="h-fit bg-white rounded-lg drop-shadow">
+          <div className="text-xl text-center p-4">Thương hiệu</div>
+          <Form form={form} className="px-4 grid grid-cols-3 gap-2">
+            <label htmlFor="name">Tên thương hiệu:</label>
+            <Form.Item
+              name="name"
+              className="col-span-2"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tên thương hiệu.',
+                },
+              ]}
             >
-              {filelist.length >= 1 ? null : (
-                <button type="button">
-                  <UploadOutlined />
-                  <div>Chọn ảnh</div>
-                </button>
-              )}
-            </Upload>
-          </Form.Item>
+              <Input size="large" />
+            </Form.Item>
+            <label>Hình ảnh:</label>
+            <Form.Item
+              name="imageUrl"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn ảnh.',
+                },
+              ]}
+              getValueFromEvent={(e) => e.fileList}
+            >
+              <Upload
+                name="file"
+                beforeUpload={() => false}
+                listType="picture-circle"
+                fileList={filelist}
+                accept="image/png, image/gif, image/jpeg, image/svg"
+                maxCount={1}
+                onChange={handleFileChange}
+              >
+                {filelist.length >= 1 ? null : (
+                  <button type="button">
+                    <UploadOutlined />
+                    <div>Chọn ảnh</div>
+                  </button>
+                )}
+              </Upload>
+            </Form.Item>
 
-          <div className="col-span-3 grid grid-cols-1 lg:grid-cols-5 gap-2 pb-4">
-            <Button
-              type="primary"
-              className="lg:col-span-2"
-              size="large"
-              htmlType="submit"
-              onClick={handleAdd}
-              disabled={isUpdate}
-            >
-              {loadingAdd ? <Spin /> : 'Thêm'}
-            </Button>
-            <Button
-              type="primary"
-              className="lg:col-span-2"
-              size="large"
-              onClick={handleUpdate}
-              disabled={!isUpdate}
-            >
-              {loadingUpdate ? <Spin /> : 'Cập nhật'}
-            </Button>
-            <Tooltip title="Làm mới">
-              <Button size="large" className="" onClick={handleClear}>
-                <SiCcleaner className="text-2xl flex-shrink-0" />
+            <div className="col-span-3 grid grid-cols-1 lg:grid-cols-5 gap-2 pb-4">
+              <Button
+                type="primary"
+                className="lg:col-span-2"
+                size="large"
+                htmlType="submit"
+                onClick={handleAdd}
+                disabled={isUpdate}
+              >
+                {loadingAdd ? <Spin /> : 'Thêm'}
               </Button>
-            </Tooltip>
-          </div>
-        </Form>
+              <Button
+                type="primary"
+                className="lg:col-span-2"
+                size="large"
+                onClick={handleUpdate}
+                disabled={!isUpdate}
+              >
+                {loadingUpdate ? <Spin /> : 'Cập nhật'}
+              </Button>
+              <Tooltip title="Làm mới">
+                <Button size="large" className="" onClick={handleClear}>
+                  <SiCcleaner className="text-2xl flex-shrink-0" />
+                </Button>
+              </Tooltip>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   )

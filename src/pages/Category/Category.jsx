@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { App, Button, Flex, Form, Input, Popconfirm, Spin, Table, Tooltip } from 'antd'
 import categoryService from '../../services/products/categoryService'
-import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, HomeTwoTone } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
 import { showError } from '../../services/commonService'
+import BreadcrumbLink from '../../components/BreadcrumbLink'
 
 const Category = () => {
   const { notification } = App.useApp()
@@ -17,6 +18,16 @@ const Category = () => {
 
   const [update, setUpdate] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
+
+  const breadcrumb = [
+    {
+      path: '/',
+      title: <HomeTwoTone />,
+    },
+    {
+      title: 'Danh mục',
+    },
+  ]
 
   const columns = (onUpdate, handleDelete) => [
     {
@@ -133,58 +144,61 @@ const Category = () => {
   }
 
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-      <div className="h-fit md:col-span-2 bg-white rounded-lg drop-shadow">
-        <Table
-          loading={isLoading}
-          columns={columns(onUpdate, handleDelete)}
-          dataSource={data}
-          rowKey={(record) => record.id}
-          className="overflow-x-auto"
-        />
-      </div>
-      <div className="h-fit bg-white rounded-lg drop-shadow">
-        <div className="text-xl text-center p-4">Danh mục</div>
-        <Form form={form} className="px-4 grid grid-cols-3 gap-2">
-          <label htmlFor="name">Tên danh mục:</label>
-          <Form.Item
-            name="name"
-            className="col-span-2"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tên danh mục.',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <div className="col-span-3 grid grid-cols-1 lg:grid-cols-5 gap-2 pb-4">
-            <Button
-              type="primary"
-              className="lg:col-span-2"
-              size="large"
-              onClick={handleAdd}
-              disabled={isUpdate}
+    <div className="space-y-4">
+      <BreadcrumbLink breadcrumb={breadcrumb} />
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+        <div className="h-fit md:col-span-2 bg-white rounded-lg drop-shadow">
+          <Table
+            loading={isLoading}
+            columns={columns(onUpdate, handleDelete)}
+            dataSource={data}
+            rowKey={(record) => record.id}
+            className="overflow-x-auto"
+          />
+        </div>
+        <div className="h-fit bg-white rounded-lg drop-shadow">
+          <div className="text-xl text-center p-4">Danh mục</div>
+          <Form form={form} className="px-4 grid grid-cols-3 gap-2">
+            <label htmlFor="name">Tên danh mục:</label>
+            <Form.Item
+              name="name"
+              className="col-span-2"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tên danh mục.',
+                },
+              ]}
             >
-              {loadingAdd ? <Spin /> : 'Thêm'}
-            </Button>
-            <Button
-              type="primary"
-              className="lg:col-span-2"
-              size="large"
-              onClick={handleUpdate}
-              disabled={!isUpdate}
-            >
-              {loadingUpdate ? <Spin /> : 'Cập nhật'}
-            </Button>
-            <Tooltip title="Làm mới">
-              <Button size="large" className="" onClick={handleClear}>
-                <SiCcleaner className="text-2xl flex-shrink-0" />
+              <Input />
+            </Form.Item>
+            <div className="col-span-3 grid grid-cols-1 lg:grid-cols-5 gap-2 pb-4">
+              <Button
+                type="primary"
+                className="lg:col-span-2"
+                size="large"
+                onClick={handleAdd}
+                disabled={isUpdate}
+              >
+                {loadingAdd ? <Spin /> : 'Thêm'}
               </Button>
-            </Tooltip>
-          </div>
-        </Form>
+              <Button
+                type="primary"
+                className="lg:col-span-2"
+                size="large"
+                onClick={handleUpdate}
+                disabled={!isUpdate}
+              >
+                {loadingUpdate ? <Spin /> : 'Cập nhật'}
+              </Button>
+              <Tooltip title="Làm mới">
+                <Button size="large" className="" onClick={handleClear}>
+                  <SiCcleaner className="text-2xl flex-shrink-0" />
+                </Button>
+              </Tooltip>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   )
