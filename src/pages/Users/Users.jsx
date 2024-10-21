@@ -5,7 +5,7 @@ import { formatDateTime, showError } from '../../services/commonService'
 import { HomeTwoTone } from '@ant-design/icons'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
 
-const UserBot = () => {
+const User = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState([])
   const [searchLoading, setSearchLoading] = useState(false)
@@ -115,4 +115,4 @@ const UserBot = () => {
   )
 }
 
-export default UserBot
+export default User

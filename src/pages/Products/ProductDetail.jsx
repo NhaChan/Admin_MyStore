@@ -97,7 +97,7 @@ const ProductDetail = () => {
       const data = {
         ...values,
         description: values.description ?? '',
-        quanlity: values.quanlity ?? 1,
+        quantity: values.quantity ?? 1,
       }
 
       delete data.imageUrls
@@ -133,7 +133,7 @@ const ProductDetail = () => {
         onValuesChange={() => setUpdate(true)}
         onFinish={updateProduct}
         layout="vertical"
-        initialValues={{ quanlity: 0, discount: 0 }}
+        initialValues={{ quantity: 0, discount: 0 }}
         className="grid lg:grid-cols-2 gap-4 md:grid-cols-1"
       >
         <Card>
@@ -183,7 +183,7 @@ const ProductDetail = () => {
             </Form.Item>
             <Form.Item
               label="Số lượng"
-              name="quanlity"
+              name="quantity"
               rules={[
                 {
                   required: true,

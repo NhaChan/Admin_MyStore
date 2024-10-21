@@ -12,7 +12,7 @@ const updateCategory = async (id, data) =>
   await axios.put(API_URL + `/update/${id}`, data, { headers: authHeader() })
 
 const deleteCategory = async (id) =>
-  await axios.delete(API_URL + `/delete/${id}`, { headers: authHeader })
+  await axios.delete(API_URL + `/delete/${id}`, { headers: authHeader() })
 
 const categoryService = {
   getAllCategory,

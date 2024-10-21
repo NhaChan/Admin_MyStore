@@ -61,7 +61,7 @@ const Products = () => {
     },
     {
       title: 'Số lượng',
-      dataIndex: 'quanlity',
+      dataIndex: 'quantity',
     },
     {
       title: 'Danh mục',

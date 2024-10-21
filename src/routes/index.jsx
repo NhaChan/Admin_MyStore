@@ -3,31 +3,38 @@ import Home from '../pages/Home'
 import DefaultLayout from '../components/Layout/DefaultLayout'
 import { Navigate, Route } from 'react-router-dom'
 import Products from '../pages/Products'
-import { DesktopOutlined, PieChartOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  ContainerOutlined,
+  PieChartOutlined,
+  ProfileOutlined,
+  ReadOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
 import Users from '../pages/Users'
 import Brands from '../pages/Brands'
 import Login from '../pages/Login'
 import Category from '../pages/Category'
 import ProductAdd from '../pages/Products/ProductAdd'
 import ProductDetail from '../pages/Products/ProductDetail'
+import Order from '../pages/Orders'
+import OrderDetail from '../pages/Orders/OrderDetail'
 
 export const navigateItems = [
   { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
   { key: '/users', icon: <UserOutlined />, label: 'Người dùng' },
-  { key: '/products', icon: <DesktopOutlined />, label: 'Sản phẩm' },
+  { key: '/products', icon: <ReadOutlined />, label: 'Sản phẩm' },
   {
     key: '1',
     label: 'Sản Phẩm',
-    icon: <TeamOutlined />,
+    icon: <ProfileOutlined />,
     children: [
       { key: '/brands', label: 'Thương hiệu' },
       { key: '/categories', label: 'Danh mục' },
     ],
   },
-  { key: '/suppliers', icon: <UserOutlined />, label: 'Nhà cung cấp' },
-  { key: '/orders', icon: <UserOutlined />, label: 'Đơn đặt hàng' },
-  { key: '/staffs', icon: <UserOutlined />, label: 'Nhân viên' },
-  { key: '/comments', icon: <UserOutlined />, label: 'Bình luận' },
+  { key: '/orders', icon: <ContainerOutlined />, label: 'Đơn đặt hàng' },
+  //{ key: '/staffs', icon: <UserOutlined />, label: 'Nhân viên' },
+  //{ key: '/comments', icon: <UserOutlined />, label: 'Bình luận' },
 ]
 
 export const publicRoutes = [{ path: '/', component: Login, Layout: null }]
@@ -40,10 +47,9 @@ export const privateRoutes = [
   { path: '/product-detail/:id', component: ProductDetail },
   { path: '/brands', component: Brands },
   { path: '/categories', component: Category },
-  { path: '/suppliers', component: Users },
-  { path: '/orders', component: Users },
-  { path: '/staffs', component: Users },
-  { path: '/comments', component: Users },
+  { path: '/orders', component: Order },
+  { path: '/order-detail/:id', component: OrderDetail },
+  //{ path: '/comments', component: Users },
 ]
 
 export const generatePublicRoutes = (isAuthenticated) => {
