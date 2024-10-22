@@ -23,7 +23,8 @@ const cancel = async (id) => await axios.delete(API_URL + `/${id}`, { headers: a
 const nextStatus = async (orderId) =>
   await axios.put(API_URL + `/next-status/${orderId}`, { headers: authHeader() })
 
-
+const shipping = async (id, data) =>
+  await axios.put(API_URL + `/shipping/${id}`, data, { headers: authHeader() })
 
 const orderService = {
   getAll,
@@ -31,6 +32,7 @@ const orderService = {
   updateStatus,
   cancel,
   nextStatus,
+  shipping,
 }
 
 export default orderService

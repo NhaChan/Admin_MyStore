@@ -4,11 +4,15 @@ import {
   Button,
   Divider,
   Drawer,
+  Form,
   Image,
   Input,
+  InputNumber,
   List,
+  Modal,
   Pagination,
   Popconfirm,
+  Select,
   Table,
   Tag,
 } from 'antd'
@@ -47,6 +51,9 @@ const Order = () => {
   const [openDrawer, setOpenDrawer] = useState(false)
   const [orderLoading, setOrderLoading] = useState(false)
   const [orderDetails, setOrderDetails] = useState()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [form] = Form.useForm()
+  const [orderId, setOrderId] = useState()
 
   const columns = (loading, nextOrderStatus, cancelOrder, openOrderDetail) => [
     {
@@ -72,10 +79,10 @@ const Order = () => {
       dataIndex: 'amountPaid',
       render: (value) => formatVND(value),
     },
-    // {
-    //   title: 'Thanh toán',
-    //   dataIndex: 'paymentMethod',
-    // },
+    {
+      title: 'Thanh toán',
+      dataIndex: 'paymentMethod',
+    },
     {
       title: 'Trạng thái đơn',
       dataIndex: 'orderStatus',
@@ -92,12 +99,15 @@ const Order = () => {
             color = 'processing'
             break
           case 2:
-            color = 'lime'
+            color = 'blue'
             break
           case 3:
-            color = 'cyan'
+            color = 'lime'
             break
           case 4:
+            color = 'cyan'
+            break
+          case 5:
             color = 'error'
             break
           default:
@@ -115,8 +125,9 @@ const Order = () => {
       render: (value, record) => (
         <>
           {!(
-            (record.orderStatus === CancelStatus || record.orderStatus === ReceivedStatus)
-            // record.orderStatus === ConfirmedStatus
+            record.orderStatus === CancelStatus ||
+            record.orderStatus === ReceivedStatus ||
+            record.orderStatus === ConfirmedStatus
           ) && (
             <Popconfirm
               title={
@@ -152,13 +163,16 @@ const Order = () => {
               loading={loading}
               onConfirm={() => cancelOrder(record.id)}
             >
-              <Button type="link" danger>
+              <Button type="primary" danger>
                 Hủy đơn
               </Button>
             </Popconfirm>
           ) : (
             value === ConfirmedStatus && (
-              <Popconfirm title="Xác nhận gọi đơn vị vận chuyển!">
+              <Popconfirm
+                title="Xác nhận gọi đơn vị vận chuyển!"
+                onConfirm={() => showModal(record.id)}
+              >
                 <Button type="dashed" danger>
                   Giao đơn
                 </Button>
@@ -229,6 +243,33 @@ const Order = () => {
     }
   }
 
+  const showModal = (id) => {
+    setIsModalOpen(true)
+    setOrderId(id)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleShipping = async (id) => {
+    try {
+      // console.log('id', orderId)
+      setLoading(true)
+      const value = await form.validateFields()
+      // console.log(value)
+      const res = await orderService.shipping(orderId, value)
+      console.log('shipping', res)
+      // setData((pre) =>
+      //   pre.map((order) => (order.id === id ? { ...order, orderStatus: AwaitingPickup } : order)),
+      // )
+    } catch (error) {
+      showError(error)
+    } finally {
+      setIsModalOpen(false)
+    }
+  }
+
   const onCloseDrawer = () => {
     setOpenDrawer(false)
   }
@@ -250,6 +291,87 @@ const Order = () => {
   return (
     <>
       {' '}
+      <Modal
+        title="Đơn vị vận chuyển"
+        open={isModalOpen}
+        onOk={handleShipping}
+        onCancel={handleCancel}
+      >
+        <Divider />
+        <Form form={form}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Form.Item
+              label="Dài"
+              name="length"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập độ dài sản phẩm',
+                },
+              ]}
+            >
+              <InputNumber className="w-full" size="large" />
+            </Form.Item>
+            <Form.Item
+              label="Nặng"
+              name="weight"
+              rules={[
+                {
+                  required: true,
+                  message: 'Cân nặng là bắt buộc',
+                },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Form.Item
+              label="Cao"
+              name="height"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập chiều cao sản phẩm',
+                },
+              ]}
+            >
+              <InputNumber className="w-full" size="large" />
+            </Form.Item>
+            <Form.Item
+              label="Rộng"
+              name="width"
+              rules={[
+                {
+                  required: true,
+                  message: 'Chiều rộng là bắt buộc',
+                },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+          </div>
+          <Form.Item label="Chú ý:" name="required_note">
+            <Select
+              placeholder="Ghi chú"
+              options={[
+                {
+                  value: 0,
+                  label: 'Cho thử hàng',
+                },
+                {
+                  value: 1,
+                  label: 'Chỉ xem hàng, không thử',
+                },
+                {
+                  value: 2,
+                  label: 'Không cho xem hàng',
+                },
+              ]}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
       <div className="space-y-4">
         <BreadcrumbLink breadcrumb={breadcrumb} />
         <div className="p-4 drop-shadow rounded-lg bg-white space-y-2">

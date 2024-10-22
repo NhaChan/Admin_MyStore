@@ -9,5 +9,6 @@ export const OrderStatus = {
 
 export const ProcessingStatus = 0
 export const ConfirmedStatus = 1
+export const AwaitingPickup = 2
 export const ReceivedStatus = 4
 export const CancelStatus = 5
