@@ -26,6 +26,9 @@ const nextStatus = async (orderId) =>
 const shipping = async (id, data) =>
   await axios.put(API_URL + `/shipping/${id}`, data, { headers: authHeader() })
 
+const getStatus = async (status) =>
+  await axios.get(API_URL + `/status/${status}`, { headers: authHeader() })
+
 const orderService = {
   getAll,
   getOrder,
@@ -33,6 +36,7 @@ const orderService = {
   cancel,
   nextStatus,
   shipping,
+  getStatus,
 }
 
 export default orderService

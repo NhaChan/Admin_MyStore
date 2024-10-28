@@ -93,7 +93,7 @@ const ProductAdd = () => {
       await productService.addProduct(formData)
 
       notification.success({ message: 'Thêm sản phẩm thành công.' })
-      navigate(-1)
+      // navigate(-1)
       setUpdate(false)
       form.resetFields()
       setFileList([])

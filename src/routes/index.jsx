@@ -18,6 +18,8 @@ import ProductAdd from '../pages/Products/ProductAdd'
 import ProductDetail from '../pages/Products/ProductDetail'
 import Order from '../pages/Orders'
 import OrderDetail from '../pages/Orders/OrderDetail'
+import StockReceipt from '../pages/StockReceipt'
+import { BsHouseAdd } from 'react-icons/bs'
 
 export const navigateItems = [
   { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
@@ -33,7 +35,7 @@ export const navigateItems = [
     ],
   },
   { key: '/orders', icon: <ContainerOutlined />, label: 'Đơn đặt hàng' },
-  //{ key: '/staffs', icon: <UserOutlined />, label: 'Nhân viên' },
+  { key: '/stock', icon: <BsHouseAdd />, label: 'Phiếu nhập' },
   //{ key: '/comments', icon: <UserOutlined />, label: 'Bình luận' },
 ]
 
@@ -49,7 +51,7 @@ export const privateRoutes = [
   { path: '/categories', component: Category },
   { path: '/orders', component: Order },
   { path: '/order-detail/:id', component: OrderDetail },
-  //{ path: '/comments', component: Users },
+  { path: '/stock', component: StockReceipt },
 ]
 
 export const generatePublicRoutes = (isAuthenticated) => {

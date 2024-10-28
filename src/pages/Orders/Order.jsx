@@ -14,12 +14,14 @@ import {
   Popconfirm,
   Select,
   Table,
+  Tabs,
   Tag,
 } from 'antd'
 import orderService from '../../services/orderService'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
 import { HomeTwoTone } from '@ant-design/icons'
 import {
+  AwaitingPickup,
   CancelStatus,
   ConfirmedStatus,
   OrderStatus,
@@ -128,7 +130,7 @@ const Order = () => {
             record.orderStatus === CancelStatus ||
             record.orderStatus === ReceivedStatus ||
             record.orderStatus === ConfirmedStatus
-          ) && (
+          ) ? (
             <Popconfirm
               title={
                 <>
@@ -145,6 +147,17 @@ const Order = () => {
                 Duyệt
               </Button>
             </Popconfirm>
+          ) : (
+            record.orderStatus === ConfirmedStatus && (
+              <Popconfirm
+                title="Xác nhận gọi đơn vị vận chuyển!"
+                onConfirm={() => showModal(record.id)}
+              >
+                <Button className="m-1" type="dashed" danger>
+                  Giao đơn
+                </Button>
+              </Popconfirm>
+            )
           )}
           <Button onClick={() => openOrderDetail(value)}>
             <FaRegEye />
@@ -157,7 +170,7 @@ const Order = () => {
       dataIndex: 'orderStatus',
       render: (value, record) => (
         <>
-          {value === ProcessingStatus ? (
+          {value === ProcessingStatus && (
             <Popconfirm
               title="Xác nhận hủy đơn"
               loading={loading}
@@ -167,17 +180,6 @@ const Order = () => {
                 Hủy đơn
               </Button>
             </Popconfirm>
-          ) : (
-            value === ConfirmedStatus && (
-              <Popconfirm
-                title="Xác nhận gọi đơn vị vận chuyển!"
-                onConfirm={() => showModal(record.id)}
-              >
-                <Button type="dashed" danger>
-                  Giao đơn
-                </Button>
-              </Popconfirm>
-            )
           )}
         </>
       ),
@@ -252,17 +254,16 @@ const Order = () => {
     setIsModalOpen(false)
   }
 
-  const handleShipping = async (id) => {
+  const handleShipping = async () => {
     try {
-      // console.log('id', orderId)
       setLoading(true)
       const value = await form.validateFields()
-      // console.log(value)
-      const res = await orderService.shipping(orderId, value)
-      console.log('shipping', res)
-      // setData((pre) =>
-      //   pre.map((order) => (order.id === id ? { ...order, orderStatus: AwaitingPickup } : order)),
-      // )
+      await orderService.shipping(orderId, value)
+      setData((pre) =>
+        pre.map((order) =>
+          order.id === orderId ? { ...order, orderStatus: AwaitingPickup } : order,
+        ),
+      )
     } catch (error) {
       showError(error)
     } finally {
@@ -279,7 +280,7 @@ const Order = () => {
     try {
       setOrderLoading(true)
       const res = await orderService.getOrder(id)
-      // console.log('dt', res)
+      console.log('dt', res)
       setOrderDetails(res.data)
     } catch (error) {
       showError(error)
@@ -290,7 +291,6 @@ const Order = () => {
 
   return (
     <>
-      {' '}
       <Modal
         title="Đơn vị vận chuyển"
         open={isModalOpen}
@@ -322,7 +322,7 @@ const Order = () => {
                 },
               ]}
             >
-              <InputNumber />
+              <InputNumber size="large" />
             </Form.Item>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -348,11 +348,12 @@ const Order = () => {
                 },
               ]}
             >
-              <InputNumber />
+              <InputNumber size="large" />
             </Form.Item>
           </div>
           <Form.Item label="Chú ý:" name="required_note">
             <Select
+              size="large"
               placeholder="Ghi chú"
               options={[
                 {
@@ -385,14 +386,37 @@ const Order = () => {
             onChange={(e) => e.target.value === '' && setSearch('')}
           />
 
-          <Table
+          <Tabs
+            // onChange={onChange}
+            type="card"
+            className="w-full"
+            items={Object.entries({ all: 'Tất cả', ...OrderStatus }).map(([key, value]) => {
+              return {
+                label: value,
+                key: key,
+                children: (
+                  <Table
+                    pagination={false}
+                    loading={isLoading}
+                    columns={columns(loading, nextOrderStatus, cancelOrder, openOrderDetail)}
+                    dataSource={data}
+                    rowKey={(record) => record.id}
+                    className="overflow-x-auto"
+                  />
+                ),
+              }
+            })}
+            activeKey={orderStatus}
+          />
+
+          {/* <Table
             pagination={false}
             loading={isLoading}
             columns={columns(loading, nextOrderStatus, cancelOrder, openOrderDetail)}
             dataSource={data}
             rowKey={(record) => record.id}
             className="overflow-x-auto"
-          />
+          /> */}
           <Pagination
             align="end"
             hideOnSinglePage
@@ -440,21 +464,6 @@ const Order = () => {
             <Divider />
             <div>
               <span>Mã đơn #{orderDetails.id}</span>
-              {/* <Tag
-                color={
-                  orderDetails.orderStatus === 0
-                    ? 'gold'
-                    : orderDetails.orderStatus === 1
-                    ? 'processing'
-                    : orderDetails.orderStatus === 2
-                    ? 'lime'
-                    : orderDetails.orderStatus === 3
-                    ? 'cyan'
-                    : 'error'
-                }
-              >
-                {OrderStatus[orderDetails.orderStatus]}
-              </Tag> */}
             </div>
             <Divider />
             <List

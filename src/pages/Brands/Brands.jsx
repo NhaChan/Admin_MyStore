@@ -236,7 +236,7 @@ const Brands = () => {
               <Upload
                 name="file"
                 beforeUpload={() => false}
-                listType="picture-circle"
+                listType="picture-card"
                 fileList={filelist}
                 accept="image/png, image/gif, image/jpeg, image/svg"
                 maxCount={1}
