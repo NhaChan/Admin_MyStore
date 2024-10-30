@@ -48,7 +48,7 @@ const Order = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentPageSize, setCurrentPageSize] = useState(10)
   const [search, setSearch] = useState('')
-  const [orderStatus, setOrderStatus] = useState([])
+  const [orderStatus, setOrderStatus] = useState('all')
   const [loading, setLoading] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   const [orderLoading, setOrderLoading] = useState(false)
@@ -89,7 +89,7 @@ const Order = () => {
       title: 'Trạng thái đơn',
       dataIndex: 'orderStatus',
       align: 'center',
-      filters: orderStatus,
+      // filters: orderStatus,
       onFilter: (value, record) => record.orderStatus === value,
       render: (value) => {
         let color = ''
@@ -189,20 +189,26 @@ const Order = () => {
   const handleSearch = (key) => key && key !== search && setSearch(key)
 
   useEffect(() => {
+    // console.log(orderStatus)
     const fetchData = async () => {
       search ? setSearchLoading(true) : setIsLoading(true)
+      let res
       try {
-        const res = await orderService.getAll(currentPage, currentPageSize, search)
+        if (orderStatus === 'all') {
+          res = await orderService.getAll(currentPage, currentPageSize, search)
+        } else {
+          res = await orderService.getStatus(currentPage, currentPageSize, search, orderStatus)
+        }
 
-        var newOrderStatus = [...new Set(res.data?.items?.map((order) => order.orderStatus))].map(
-          (value) => {
-            return {
-              value: value,
-              text: OrderStatus[value],
-            }
-          },
-        )
-        setOrderStatus(newOrderStatus)
+        // var newOrderStatus = [...new Set(res.data?.items?.map((order) => order.orderStatus))].map(
+        //   (value) => {
+        //     return {
+        //       value: value,
+        //       text: OrderStatus[value],
+        //     }
+        //   },
+        // )
+        // setOrderStatus(newOrderStatus)
         // console.log('order', res.data)
         setData(res.data?.items)
         setTotalItems(res.data?.totalItems)
@@ -214,7 +220,7 @@ const Order = () => {
       }
     }
     fetchData()
-  }, [currentPage, currentPageSize, search])
+  }, [orderStatus, currentPage, currentPageSize, search])
 
   const nextOrderStatus = async (id) => {
     try {
@@ -388,10 +394,27 @@ const Order = () => {
 
           <Tabs
             // onChange={onChange}
-            type="card"
+            onChange={(key) => setOrderStatus(key)}
+            // type="card"
             className="w-full"
-            items={Object.entries({ all: 'Tất cả', ...OrderStatus }).map(([key, value]) => {
-              return {
+            centered
+            size="large"
+            items={[
+              {
+                label: 'Tất cả',
+                key: 'all',
+                children: (
+                  <Table
+                    pagination={false}
+                    loading={isLoading}
+                    columns={columns(loading, nextOrderStatus, cancelOrder, openOrderDetail)}
+                    dataSource={data}
+                    rowKey={(record) => record.id}
+                    className="overflow-x-auto w-full"
+                  />
+                ),
+              },
+              ...Object.entries(OrderStatus).map(([key, value]) => ({
                 label: value,
                 key: key,
                 children: (
@@ -401,14 +424,13 @@ const Order = () => {
                     columns={columns(loading, nextOrderStatus, cancelOrder, openOrderDetail)}
                     dataSource={data}
                     rowKey={(record) => record.id}
-                    className="overflow-x-auto"
+                    className="overflow-x-auto w-full"
                   />
                 ),
-              }
-            })}
+              })),
+            ]}
             activeKey={orderStatus}
           />
-
           {/* <Table
             pagination={false}
             loading={isLoading}

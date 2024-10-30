@@ -26,8 +26,15 @@ const nextStatus = async (orderId) =>
 const shipping = async (id, data) =>
   await axios.put(API_URL + `/shipping/${id}`, data, { headers: authHeader() })
 
-const getStatus = async (status) =>
-  await axios.get(API_URL + `/status/${status}`, { headers: authHeader() })
+const getStatus = async (page, pageSize, search, status) =>
+  await axios.get(API_URL + `/status/${status}`, {
+    headers: authHeader(),
+    params: {
+      page: page,
+      pageSize: pageSize,
+      search: search ?? '',
+    },
+  })
 
 const orderService = {
   getAll,

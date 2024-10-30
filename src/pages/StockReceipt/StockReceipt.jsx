@@ -54,20 +54,26 @@ const StockReceipt = () => {
       render: (value) => <span>#{value}</span>,
     },
     {
-      title: 'Ngày tạo phiếu',
-      dataIndex: 'createdAt',
-      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-      render: (value) => value !== null && formatDate(value),
+      title: 'Người lập phiếu',
+      dataIndex: 'userName',
+      // sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Ngày nhập hàng',
+      title: 'Ngày tạo phiếu',
       dataIndex: 'createdAt',
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
       render: (value) => value !== null && formatDateTime(value),
     },
     {
+      title: 'Ngày nhập hàng',
+      dataIndex: 'entryDate',
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      render: (value) => value !== null && formatDate(value),
+    },
+    {
       title: 'Tổng giá nhập',
       dataIndex: 'total',
+      render: (value) => value !== null && formatVND(value),
     },
     {
       title: 'Ghi chú',
@@ -94,7 +100,7 @@ const StockReceipt = () => {
         const resName = await productService.getName()
         setProductNames(resName.data)
         // console.log(resName)
-        console.log('stock', res.data.items)
+        // console.log('stock', res.data.items)
         setData(res.data.items)
         setTotalItems(res.data?.totalItems)
       } catch (error) {
@@ -116,24 +122,21 @@ const StockReceipt = () => {
     setOpen(false)
   }
 
-  const onChange = (date, dateString) => {
-    console.log(date, dateString)
-  }
-
   const handleAdd = async (values) => {
     const stockReceiptData = {
       entryDate: values.entryDate ? values.entryDate.format('YYYY-MM-DD') : '',
       note: values.note || '',
+      total: values.total,
       stockReceiptProducts: values.items.map((item) => ({
         productId: productNames.find((product) => product.name === item.name)?.id,
         quantity: item.quantity,
         originPrice: item.originPrice,
       })),
     }
-
+    // console.log(stockReceiptData)
     try {
       const res = await stockService.addStock(stockReceiptData)
-      //   console.log(r)
+      // console.log(res)
       setData((prevData) => [res.data, ...prevData])
 
       form.resetFields()
@@ -148,7 +151,7 @@ const StockReceipt = () => {
     try {
       //   setOrderLoading(true)
       const res = await stockService.getStockId(id)
-      console.log('std', res)
+      // console.log('std', res)
       setStockDetails(res.data)
     } catch (error) {
       showError(error)
@@ -164,10 +167,19 @@ const StockReceipt = () => {
     setIsModalOpen(false)
   }
 
+  const onValuesChange = (_, allValues) => {
+    const total = (allValues.items || []).reduce((sum, item) => {
+      const itemTotal = item?.quantity && item?.originPrice ? item.quantity * item.originPrice : 0
+      return sum + itemTotal
+    }, 0)
+    form.setFieldsValue({ total })
+  }
+
   return (
     <>
       <Drawer width={500} title="Thêm phiếu nhập" onClose={onClose} open={open}>
         <Form
+          onValuesChange={onValuesChange}
           form={form}
           layout="vertical"
           onFinish={handleAdd}
@@ -175,18 +187,27 @@ const StockReceipt = () => {
             items: [{ name: undefined, quantity: undefined, originPrice: undefined }],
           }}
         >
-          <Form.Item
-            label="Ngày nhập"
-            rules={[
-              {
-                required: true,
-                message: 'Tên sản phẩm không để trống',
-              },
-            ]}
-            name="entryDate"
-          >
-            <DatePicker placeholder="Ngày lập phiếu" size="large" onChange={onChange} />
-          </Form.Item>
+          <div className="flex justify-between space-x-4">
+            <Form.Item
+              label="Ngày nhập"
+              rules={[
+                {
+                  required: true,
+                  message: 'Ngày nhập hàng không được để trống',
+                },
+              ]}
+              name="entryDate"
+            >
+              <DatePicker
+                placeholder="Ngày lập phiếu"
+                size="large"
+                disabledDate={(current) => current && current.valueOf() > Date.now()}
+              />
+            </Form.Item>
+            <Form.Item label="Tổng giá trị" name="total">
+              <Input size="large" disabled />
+            </Form.Item>
+          </div>
           <Form.Item label="Ghi chú" name="note">
             <TextArea
               showCount
