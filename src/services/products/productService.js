@@ -45,6 +45,8 @@ const updateEnable = async (id, data) =>
 
 const getName = async () => await axios.get(API_URL + '/name', { headers: authHeader() })
 
+const getReview = async (id) => await axios.get(API_URL + `/${id}/reviews`)
+
 const productService = {
   getAll,
   fetchProductAttributes,
@@ -54,6 +56,7 @@ const productService = {
   deleteProduct,
   updateEnable,
   getName,
+  getReview,
 }
 
 export default productService

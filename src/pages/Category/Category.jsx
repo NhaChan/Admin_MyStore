@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { App, Button, Flex, Form, Input, Popconfirm, Spin, Table, Tooltip } from 'antd'
+import {
+  App,
+  Button,
+  Flex,
+  Form,
+  Image,
+  Input,
+  Popconfirm,
+  Spin,
+  Table,
+  Tooltip,
+  Upload,
+} from 'antd'
 import categoryService from '../../services/products/categoryService'
-import { DeleteTwoTone, EditTwoTone, HomeTwoTone } from '@ant-design/icons'
+import { DeleteTwoTone, EditTwoTone, HomeTwoTone, UploadOutlined } from '@ant-design/icons'
 import { SiCcleaner } from 'react-icons/si'
-import { showError } from '../../services/commonService'
+import { showError, toImageLink, toImageSrc } from '../../services/commonService'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
 
 const Category = () => {
   const { notification } = App.useApp()
   const [isLoading, setIsLoading] = useState(false)
-  const [data, setData] = useState([])
+  const [categories, setCategories] = useState([])
   const [loadingAdd, setLoadingAdd] = useState(false)
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [loadingUpdate, setLoadingUpdate] = useState(false)
@@ -18,6 +30,7 @@ const Category = () => {
 
   const [update, setUpdate] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
+  const [filelist, setFileList] = useState([])
 
   const breadcrumb = [
     {
@@ -41,6 +54,11 @@ const Category = () => {
       dataIndex: 'name',
       align: 'center',
       sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: 'Image',
+      dataIndex: 'imageUrl',
+      render: (value) => <Image rootClassName="w-20 h-20" src={toImageLink(value)} />,
     },
     {
       title: 'Thực hiện',
@@ -71,8 +89,8 @@ const Category = () => {
       setIsLoading(true)
       try {
         const res = await categoryService.getAllCategory()
-        // console.log(res.data)
-        setData(res.data)
+        console.log(res.data)
+        setCategories(res.data)
       } catch (error) {
         showError(error)
       } finally {
@@ -82,17 +100,26 @@ const Category = () => {
     fetchData()
   }, [update])
 
+  const handleFileChange = ({ fileList: newFileList }) => setFileList(newFileList)
+
   const handleAdd = async () => {
-    setLoadingAdd(true)
+    const values = await form.validateFields()
+    // console.log(filelist)
     try {
-      const values = await form.validateFields()
-      categoryService.addCategory(values)
-      notification.success({
-        message: 'Thêm danh mục thành công',
-      })
+      const formData = new FormData()
+      setLoadingAdd(true)
+      const data = { ...values, image: filelist[0]?.originFileObj }
+      console.log(filelist)
+      Object.keys(data).forEach((key) => formData.append(key, data[key]))
+      const res = await categoryService.addCategory(formData)
+      setCategories([...categories, res.data])
       setUpdate(!update)
       setIsUpdate(false)
       form.resetFields()
+      setFileList([])
+      notification.success({
+        message: `Thêm thương hiệu thành công.`,
+      })
     } catch (error) {
       showError(error)
     } finally {
@@ -100,24 +127,52 @@ const Category = () => {
     }
   }
 
-  const onUpdate = (record) => {
-    form.setFieldsValue(record)
-    setUpdateID(record.id)
+  const onUpdate = (category) => {
+    form.setFieldsValue({
+      ...category,
+      image: [
+        {
+          name: category.imageUrl,
+          url: category.imageUrl,
+        },
+      ],
+    })
+    setFileList([
+      {
+        name: category.imageUrl,
+        url: toImageSrc(category.imageUrl),
+      },
+    ])
+    setUpdateID(category.id)
     setIsUpdate(true)
   }
 
   const handleUpdate = async () => {
-    setLoadingUpdate(true)
     try {
-      const values = await form.getFieldsValue()
+      setLoadingUpdate(true)
 
-      await categoryService.updateCategory(updateID, values)
+      const formData = new FormData()
+
+      const data = {
+        ...form.getFieldsValue(),
+        image: filelist.length > 0 ? filelist[0]?.originFileObj : null,
+      }
+      Object.keys(data).forEach((key) => formData.append(key, data[key]))
+      console.log(updateID)
+      const res = await categoryService.updateCategory(updateID, formData)
+      console.log(res)
+      const newCategory = categories.filter((item) => item.id !== updateID)
+      setCategories([...newCategory, res.data])
+      console.log(newCategory)
+      console.log(res.data)
+
       notification.success({
-        message: `Cập nhật ${values.name} thành công.`,
+        message: `Thành công.`,
       })
       setUpdate(!update)
       setIsUpdate(false)
       form.resetFields()
+      setFileList([])
     } catch (error) {
       showError(error)
     } finally {
@@ -129,8 +184,8 @@ const Category = () => {
     setLoadingDelete(true)
     try {
       await categoryService.deleteCategory(id)
-      const newData = data.filter((item) => !(item.id === id))
-      setData(newData)
+      const newData = categories.filter((item) => !(item.id === id))
+      setCategories(newData)
     } catch (error) {
       showError(error)
     } finally {
@@ -151,7 +206,7 @@ const Category = () => {
           <Table
             loading={isLoading}
             columns={columns(onUpdate, handleDelete)}
-            dataSource={data}
+            dataSource={categories}
             rowKey={(record) => record.id}
             className="overflow-x-auto"
           />
@@ -171,6 +226,34 @@ const Category = () => {
               ]}
             >
               <Input />
+            </Form.Item>
+            <label>Hình ảnh:</label>
+            <Form.Item
+              name="imageUrl"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn ảnh.',
+                },
+              ]}
+              getValueFromEvent={(e) => e.fileList}
+            >
+              <Upload
+                name="file"
+                beforeUpload={() => false}
+                listType="picture-card"
+                fileList={filelist}
+                accept="image/png, image/gif, image/jpeg, image/svg"
+                maxCount={1}
+                onChange={handleFileChange}
+              >
+                {filelist.length >= 1 ? null : (
+                  <button type="button">
+                    <UploadOutlined />
+                    <div>Chọn ảnh</div>
+                  </button>
+                )}
+              </Upload>
             </Form.Item>
             <div className="col-span-3 grid grid-cols-1 lg:grid-cols-5 gap-2 pb-4">
               <Button

@@ -17,10 +17,14 @@ const addStock = async (data) => await axios.post(API_URL, data, { headers: auth
 
 const getStockId = async (id) => await axios.get(API_URL + `/${id}`, { headers: authHeader() })
 
+const updateStock = async (id, data) =>
+  await axios.put(API_URL + `/${id}`, data, { headers: authHeader() })
+
 const stockService = {
   getAllStock,
   addStock,
   getStockId,
+  updateStock,
 }
 
 export default stockService
