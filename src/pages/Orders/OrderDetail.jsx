@@ -1,4 +1,4 @@
-import { Divider, Image, Select, Table } from 'antd'
+import { Divider, Image, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
 import { HomeTwoTone } from '@ant-design/icons'
@@ -10,9 +10,6 @@ const OrderDetail = () => {
   const { id } = useParams()
   const [data, setData] = useState([])
   const [orderInfo, setOrderInfo] = useState({})
-  const handleChange = (value) => {
-    console.log(`selected ${value}`)
-  }
 
   const breadcrumb = (id) => [
     {
@@ -162,7 +159,6 @@ const OrderDetail = () => {
           </div>
         </div>
       </div>
-      
     </div>
   )
 }

@@ -98,7 +98,7 @@ const Brands = () => {
     try {
       const values = await form.validateFields()
 
-      console.log(filelist)
+      // console.log(filelist)
       try {
         const formData = new FormData()
         setLoadingAdd(true)

@@ -16,6 +16,7 @@ import {
   Table,
   Tabs,
   Tag,
+  Tooltip,
 } from 'antd'
 import orderService from '../../services/orderService'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
@@ -24,9 +25,9 @@ import {
   AwaitingPickup,
   CancelStatus,
   ConfirmedStatus,
+  FinishedStatus,
   OrderStatus,
   ProcessingStatus,
-  ReceivedStatus,
 } from '../../services/const'
 import { FaMapMarkerAlt, FaRegEye } from 'react-icons/fa'
 
@@ -110,6 +111,9 @@ const Order = () => {
             color = 'cyan'
             break
           case 5:
+            color = '#87d068'
+            break
+          case 6:
             color = 'error'
             break
           default:
@@ -125,10 +129,10 @@ const Order = () => {
       dataIndex: 'id',
       width: 230,
       render: (value, record) => (
-        <>
+        <div className="flex items-center justify-center">
           {!(
             record.orderStatus === CancelStatus ||
-            record.orderStatus === ReceivedStatus ||
+            record.orderStatus === FinishedStatus ||
             record.orderStatus === ConfirmedStatus
           ) ? (
             <Popconfirm
@@ -153,16 +157,18 @@ const Order = () => {
                 title="Xác nhận gọi đơn vị vận chuyển!"
                 onConfirm={() => showModal(record.id)}
               >
-                <Button className="m-1" type="dashed" danger>
-                  Giao đơn
-                </Button>
+                <Tooltip title="Giao cho đơn vị vận chuyển">
+                  <Button className="m-1" type="dashed" danger>
+                    Giao đơn
+                  </Button>
+                </Tooltip>
               </Popconfirm>
             )
           )}
           <Button onClick={() => openOrderDetail(value)}>
             <FaRegEye />
           </Button>
-        </>
+        </div>
       ),
     },
     {

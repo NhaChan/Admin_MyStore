@@ -17,7 +17,7 @@ import React, { useEffect, useState } from 'react'
 import { dataValueLabel, getBase64, showError } from '../../services/commonService'
 import productService from '../../services/products/productService'
 import { SiCcleaner } from 'react-icons/si'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
 
 const breadcrumb = [
@@ -43,7 +43,6 @@ const ProductAdd = () => {
   const [saveLoading, setSaveLoading] = useState(false)
   const [update, setUpdate] = useState(false)
   const [form] = Form.useForm()
-  const navigate = useNavigate()
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
