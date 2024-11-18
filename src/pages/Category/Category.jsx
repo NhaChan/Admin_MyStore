@@ -158,13 +158,13 @@ const Category = () => {
         image: filelist.length > 0 ? filelist[0]?.originFileObj : null,
       }
       Object.keys(data).forEach((key) => formData.append(key, data[key]))
-      console.log(updateID)
+      // console.log(updateID)
       const res = await categoryService.updateCategory(updateID, formData)
-      console.log(res)
+      // console.log(res)
       const newCategory = categories.filter((item) => item.id !== updateID)
       setCategories([...newCategory, res.data])
-      console.log(newCategory)
-      console.log(res.data)
+      // console.log(newCategory)
+      // console.log(res.data)
 
       notification.success({
         message: `Thành công.`,

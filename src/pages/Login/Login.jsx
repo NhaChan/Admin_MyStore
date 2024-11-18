@@ -18,7 +18,10 @@ const Login = () => {
       setLoading(true)
       const data = form.getFieldsValue()
       const res = await authService.login(data)
-      if (res.data?.roles?.includes('Admin')) {
+      // if (res.data?.roles?.includes('Admin')) {
+      const allowedRoles = ['Admin', 'Warehouser', 'CSKH', 'Statist']
+
+      if (res.data?.roles?.some((role) => allowedRoles.includes(role))) {
         dispatch(authActions.LOGIN(res.data?.roles))
         notification.success({ message: 'Đăng nhập thành công.' })
         navigate('/home')

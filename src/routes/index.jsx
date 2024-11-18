@@ -20,9 +20,16 @@ import Order from '../pages/Orders'
 import OrderDetail from '../pages/Orders/OrderDetail'
 import StockReceipt from '../pages/StockReceipt'
 import { BsHouseAdd } from 'react-icons/bs'
+import { FcStatistics } from 'react-icons/fc'
+import StatisticProduct from '../pages/StatisticProduct'
+import { MdRateReview } from 'react-icons/md'
+import Review from '../pages/Review'
+import LogHistory from '../pages/LogHistory'
+import { FaHistory } from 'react-icons/fa'
 
 export const navigateItems = [
   { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
+  { key: '/statistic', icon: <FcStatistics />, label: 'Thống kê sản phẩm' },
   { key: '/users', icon: <UserOutlined />, label: 'Người dùng' },
   { key: '/products', icon: <ReadOutlined />, label: 'Sản phẩm' },
   {
@@ -36,13 +43,15 @@ export const navigateItems = [
   },
   { key: '/orders', icon: <ContainerOutlined />, label: 'Đơn đặt hàng' },
   { key: '/stock', icon: <BsHouseAdd />, label: 'Phiếu nhập' },
-  //{ key: '/comments', icon: <UserOutlined />, label: 'Bình luận' },
+  { key: '/review', icon: <MdRateReview />, label: 'Đánh giá' },
+  { key: '/history', icon: <FaHistory />, label: 'Lịch sử' },
 ]
 
 export const publicRoutes = [{ path: '/', component: Login, Layout: null }]
 
 export const privateRoutes = [
   { path: '/home', component: Home },
+  { path: '/statistic', component: StatisticProduct },
   { path: '/users', component: Users },
   { path: '/products', component: Products },
   { path: '/add-products', component: ProductAdd },
@@ -52,6 +61,8 @@ export const privateRoutes = [
   { path: '/orders', component: Order },
   { path: '/order-detail/:id', component: OrderDetail },
   { path: '/stock', component: StockReceipt },
+  { path: '/review', component: Review },
+  { path: '/history', component: LogHistory },
 ]
 
 export const generatePublicRoutes = (isAuthenticated) => {

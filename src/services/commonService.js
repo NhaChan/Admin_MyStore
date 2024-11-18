@@ -9,11 +9,22 @@ export const toImageLink = (link) => {
 
 export const showError = (error) => {
   const errorMessage = error?.response?.data?.title || error?.response?.data || error?.message
-
-  notification.error({
-    message: 'Error',
-    description: errorMessage,
-  })
+  if (error?.response?.status === 403) {
+    notification.warning({
+      message: 'Cảnh báo',
+      description: 'Bạn không có quyền truy cập vào trang này.',
+      duration: 3,
+    })
+  } else {
+    notification.error({
+      message: 'Lỗi',
+      description: errorMessage,
+    })
+  }
+  // notification.error({
+  //   message: 'Error',
+  //   description: errorMessage,
+  // })
 }
 
 export const toImageSrc = (url) => API_URL + '/' + url

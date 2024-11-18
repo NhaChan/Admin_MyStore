@@ -14,3 +14,11 @@ export const AwaitingPickup = 2
 export const ReceivedStatus = 4
 export const FinishedStatus = 5
 export const CancelStatus = 6
+
+export const Role = {
+  // Admin: 'Quản trị viên',
+  Warehouser: 'Nhân viên quản lý kho',
+  CSKH: 'Nhân viên chăm sóc khách hàng',
+  Statist: 'Nhân viên thống kê',
+  User: 'Khách hàng',
+}

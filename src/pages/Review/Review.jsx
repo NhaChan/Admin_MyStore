@@ -86,7 +86,7 @@ const Review = () => {
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const res = await productService.getName()
+        const res = await productService.getName(1,5, )
         console.log(res.data)
         setNameProduct(res.data)
       } catch (error) {

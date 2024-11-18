@@ -192,7 +192,12 @@ const Order = () => {
     },
   ]
 
-  const handleSearch = (key) => key && key !== search && setSearch(key)
+  const handleSearch = (key) => {
+    if (key && key !== search) {
+      setSearch(key)
+      setCurrentPage(1)
+    }
+  }
 
   useEffect(() => {
     // console.log(orderStatus)
@@ -449,7 +454,8 @@ const Order = () => {
             align="end"
             hideOnSinglePage
             showSizeChanger
-            defaultCurrent={currentPage}
+            // defaultCurrent={currentPage}
+            current={currentPage}
             defaultPageSize={currentPageSize}
             total={totalItems}
             onChange={(newPage, newPageSize) => {

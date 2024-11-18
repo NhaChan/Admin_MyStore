@@ -43,7 +43,13 @@ const deleteProduct = async (id) =>
 const updateEnable = async (id, data) =>
   await axios.put(API_URL + `/updateEnable/${id}`, data, { headers: authHeader() })
 
-const getName = async () => await axios.get(API_URL + '/name', { headers: authHeader() })
+const getName = async (search) =>
+  await axios.get(API_URL + '/name', {
+    headers: authHeader(),
+    params: {
+      search: search ?? '',
+    },
+  })
 
 const getReview = async (id) => await axios.get(API_URL + `/${id}/reviews`)
 

@@ -16,13 +16,7 @@ import {
   Select,
   Table,
 } from 'antd'
-import {
-  formatDate,
-  formatDateTime,
-  formattedDayJs,
-  formatVND,
-  showError,
-} from '../../services/commonService'
+import { formatDateTime, formattedDayJs, formatVND, showError } from '../../services/commonService'
 import productService from '../../services/products/productService'
 import TextArea from 'antd/es/input/TextArea'
 import { FaRegEye } from 'react-icons/fa'
@@ -37,6 +31,8 @@ const StockReceipt = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentPageSize, setCurrentPageSize] = useState(10)
   const [search, setSearch] = useState('')
+  const [searchName, setSearchName] = useState('')
+
   const [form] = Form.useForm()
   const [productNames, setProductNames] = useState([])
   const [stocktId, setStockId] = useState(null)
@@ -76,7 +72,7 @@ const StockReceipt = () => {
       title: 'Ngày nhập hàng',
       dataIndex: 'entryDate',
       sorter: (a, b) => new Date(a.entryDate) - new Date(b.entryDate),
-      render: (value) => value !== null && formatDate(value),
+      render: (value) => value !== null && formatDateTime(value),
     },
     {
       title: 'Tổng giá nhập',
@@ -98,14 +94,27 @@ const StockReceipt = () => {
     },
   ]
 
-  const handleSearch = (key) => key && key !== search && setSearch(key)
+  // const handleSearchName = (key) => key && key !== search && setSearch(key)
+  const handleSearchName = (key) => {
+    if (key && key !== searchName) {
+      console.log(key)
+      setSearchName(key)
+    }
+  }
+
+  const handleSearch = (key) => {
+    if (key && key !== search) {
+      setSearch(key)
+      setCurrentPage(1)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       search ? setSearchLoading(true) : setIsLoading(true)
       try {
         const res = await stockService.getAllStock(currentPage, currentPageSize, search)
-        const resName = await productService.getName()
+        const resName = await productService.getName(searchName)
         setProductNames(resName.data)
         // console.log(resName)
         // console.log('stock', res.data)
@@ -119,7 +128,7 @@ const StockReceipt = () => {
       }
     }
     fetchData()
-  }, [currentPage, currentPageSize, search])
+  }, [currentPage, currentPageSize, search, searchName])
 
   const [open, setOpen] = useState(false)
   const showDrawer = () => {
@@ -132,7 +141,7 @@ const StockReceipt = () => {
 
   const handleAdd = async (values) => {
     const stockReceiptData = {
-      entryDate: values.entryDate ? values.entryDate.format('YYYY-MM-DD') : '',
+      entryDate: values.entryDate ? values.entryDate.format() : '',
       note: values.note || '',
       total: values.total,
       stockReceiptProducts: values.items.map((item) => ({
@@ -166,6 +175,7 @@ const StockReceipt = () => {
         createdAt: formattedDayJs(stockInfo.createdAt),
         note: stockInfo.note,
         total: stockInfo.total || 0,
+        productNames: productNames.productName,
       })
       form.setFieldsValue({
         ...stockInfo,
@@ -176,7 +186,7 @@ const StockReceipt = () => {
     try {
       //   setOrderLoading(true)
       const res = await stockService.getStockId(id)
-      // console.log('std', res)
+      console.log('std', res)
       // setStockDetails(res.data)
       form.setFieldsValue({
         stockDetails: res.data,
@@ -191,7 +201,7 @@ const StockReceipt = () => {
   const handleUpdate = async (values) => {
     const stockReceiptData = {
       id: stocktId.id,
-      entryDate: values.entryDate ? values.entryDate.format('YYYY-MM-DD') : '',
+      entryDate: values.entryDate ? values.entryDate.format() : '',
       note: values.note || '',
       total: values.total,
       stockReceiptProducts: values.stockDetails.map((item) => ({
@@ -309,8 +319,11 @@ const StockReceipt = () => {
                     >
                       <Select
                         placeholder="Chọn sản phẩm"
-                        optionFilterProp="label"
+                        // optionFilterProp="label"
+                        allowClear
+                        onSearch={handleSearchName}
                         showSearch={true}
+                        // defaultValue={productNames.productName}
                       >
                         {productNames.map((product) => (
                           <Select.Option key={product.id} value={product.name} label={product.name}>
@@ -476,7 +489,7 @@ const StockReceipt = () => {
               loading={searchLoading}
               className="w-1/3"
               size="large"
-              placeholder='Mã phiếu nhập...'
+              placeholder="Mã phiếu nhập..."
               allowClear
               onSearch={(key) => handleSearch(key)}
               onChange={(e) => e.target.value === '' && setSearch('')}
@@ -497,7 +510,8 @@ const StockReceipt = () => {
             align="end"
             hideOnSinglePage
             showSizeChanger
-            defaultCurrent={currentPage}
+            // defaultCurrent={currentPage}
+            current={currentPage}
             defaultPageSize={currentPageSize}
             total={totalItems}
             onChange={(newPage, newPageSize) => {

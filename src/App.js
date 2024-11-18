@@ -4,6 +4,7 @@ import { generatePrivateRoutes, generatePublicRoutes } from './routes'
 import NotFound from './components/NotFound'
 import { createContext, useContext, useReducer } from 'react'
 import { initialState, reducer } from './services/authReducer'
+import { App as AntdApp } from 'antd'
 
 const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
@@ -28,15 +29,21 @@ function App() {
   // }, [state.isAuthenticated])
 
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
-      <Router>
-        <Routes>
-          {generatePublicRoutes(state.isAuthenticated)}
-          {state.roles?.includes('Admin') && generatePrivateRoutes(state.isAuthenticated)}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </AuthContext.Provider>
+    <AntdApp>
+      <AuthContext.Provider value={{ state, dispatch }}>
+        <Router>
+          <Routes>
+            {generatePublicRoutes(state.isAuthenticated)}
+            {/* {state.roles?.includes('Admin') && generatePrivateRoutes(state.isAuthenticated)} */}
+            {/* {['Admin', 'Warehouser', 'CSKH', 'Statist'].some((role) =>
+              state.roles?.includes(role),
+            ) && generatePrivateRoutes(state.isAuthenticated)} */}
+            {generatePrivateRoutes(state.isAuthenticated)}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AuthContext.Provider>
+    </AntdApp>
   )
 }
 
