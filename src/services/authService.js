@@ -26,6 +26,11 @@ const logout = () => {
   Cookies.remove('access_token_admin')
 }
 
+const getRole = () => {
+  const user = getCurrentUser()
+  return user.roles
+}
+
 const refreshToken = async (data) => await axios.post(API_URL + '/refresh-token', data)
 
 const authService = {
@@ -34,6 +39,7 @@ const authService = {
   setUserToken,
   logout,
   refreshToken,
+  getRole,
 }
 
 export default authService

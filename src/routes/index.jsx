@@ -47,6 +47,34 @@ export const navigateItems = [
   { key: '/history', icon: <FaHistory />, label: 'Lịch sử' },
 ]
 
+export const navigateCSKH = [
+  { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
+  {
+    key: '1',
+    label: 'Sản Phẩm',
+    icon: <ProfileOutlined />,
+    children: [
+      { key: '/brands', label: 'Thương hiệu' },
+      { key: '/categories', label: 'Danh mục' },
+    ],
+  },
+  { key: '/orders', icon: <ContainerOutlined />, label: 'Đơn đặt hàng' },
+]
+
+export const navigateStatist = [
+  { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
+  { key: '/statistic', icon: <FcStatistics />, label: 'Thống kê sản phẩm' },
+  { key: '/products', icon: <ReadOutlined />, label: 'Sản phẩm' },
+  { key: '/orders', icon: <ContainerOutlined />, label: 'Đơn đặt hàng' },
+  { key: '/stock', icon: <BsHouseAdd />, label: 'Phiếu nhập' },
+]
+
+export const navigateWarehouse = [
+  { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
+  { key: '/products', icon: <ReadOutlined />, label: 'Sản phẩm' },
+  { key: '/stock', icon: <BsHouseAdd />, label: 'Phiếu nhập' },
+]
+
 export const publicRoutes = [{ path: '/', component: Login, Layout: null }]
 
 export const privateRoutes = [
@@ -63,6 +91,29 @@ export const privateRoutes = [
   { path: '/stock', component: StockReceipt },
   { path: '/review', component: Review },
   { path: '/history', component: LogHistory },
+]
+
+export const StatistRoutes = [
+  { path: '/home', component: Home },
+  { path: '/statistic', component: StatisticProduct },
+  { path: '/orders', component: Order },
+  { path: '/stock', component: StockReceipt },
+]
+
+export const WarehouserRoutes = [
+  { path: '/home', component: Home },
+  { path: '/products', component: Products },
+  { path: '/add-products', component: ProductAdd },
+  { path: '/product-detail/:id', component: ProductDetail },
+  { path: '/stock', component: StockReceipt },
+]
+
+export const CSKHRoutes = [
+  { path: '/home', component: Home },
+  { path: '/brands', component: Brands },
+  { path: '/categories', component: Category },
+  { path: '/orders', component: Order },
+  { path: '/order-detail/:id', component: OrderDetail },
 ]
 
 export const generatePublicRoutes = (isAuthenticated) => {
@@ -95,6 +146,83 @@ export const generatePublicRoutes = (isAuthenticated) => {
 export const generatePrivateRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
     return privateRoutes.map((route, index) => {
+      const Page = route.component
+      let Layout = DefaultLayout
+
+      if (route.Layout) {
+        Layout = route.Layout
+      } else if (route.Layout === null) {
+        Layout = Fragment
+      }
+      return (
+        <Route
+          key={index}
+          path={route.path}
+          element={
+            <Layout>
+              <Page />
+            </Layout>
+          }
+        />
+      )
+    })
+  }
+}
+
+export const statistRoutes = (isAuthenticated) => {
+  if (isAuthenticated) {
+    return StatistRoutes.map((route, index) => {
+      const Page = route.component
+      let Layout = DefaultLayout
+
+      if (route.Layout) {
+        Layout = route.Layout
+      } else if (route.Layout === null) {
+        Layout = Fragment
+      }
+      return (
+        <Route
+          key={index}
+          path={route.path}
+          element={
+            <Layout>
+              <Page />
+            </Layout>
+          }
+        />
+      )
+    })
+  }
+}
+
+export const warehouserRoutes = (isAuthenticated) => {
+  if (isAuthenticated) {
+    return WarehouserRoutes.map((route, index) => {
+      const Page = route.component
+      let Layout = DefaultLayout
+
+      if (route.Layout) {
+        Layout = route.Layout
+      } else if (route.Layout === null) {
+        Layout = Fragment
+      }
+      return (
+        <Route
+          key={index}
+          path={route.path}
+          element={
+            <Layout>
+              <Page />
+            </Layout>
+          }
+        />
+      )
+    })
+  }
+}
+export const cSKHRoutes = (isAuthenticated) => {
+  if (isAuthenticated) {
+    return CSKHRoutes.map((route, index) => {
       const Page = route.component
       let Layout = DefaultLayout
 

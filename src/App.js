@@ -1,6 +1,12 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
-import { generatePrivateRoutes, generatePublicRoutes } from './routes'
+import {
+  cSKHRoutes,
+  generatePrivateRoutes,
+  generatePublicRoutes,
+  statistRoutes,
+  warehouserRoutes,
+} from './routes'
 import NotFound from './components/NotFound'
 import { createContext, useContext, useReducer } from 'react'
 import { initialState, reducer } from './services/authReducer'
@@ -34,11 +40,10 @@ function App() {
         <Router>
           <Routes>
             {generatePublicRoutes(state.isAuthenticated)}
-            {/* {state.roles?.includes('Admin') && generatePrivateRoutes(state.isAuthenticated)} */}
-            {/* {['Admin', 'Warehouser', 'CSKH', 'Statist'].some((role) =>
-              state.roles?.includes(role),
-            ) && generatePrivateRoutes(state.isAuthenticated)} */}
-            {generatePrivateRoutes(state.isAuthenticated)}
+            {state.roles?.includes('Admin') && generatePrivateRoutes(state.isAuthenticated)}
+            {state.roles?.includes('Statist') && statistRoutes(state.isAuthenticated)}
+            {state.roles?.includes('Warehouser') && warehouserRoutes(state.isAuthenticated)}
+            {state.roles?.includes('CSKH') && cSKHRoutes(state.isAuthenticated)}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
