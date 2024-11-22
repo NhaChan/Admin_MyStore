@@ -42,6 +42,10 @@ const ChartDate = ({
                     value={formatVND(totalObj.expense || 0)}
                     precision={2}
                     loading={loading}
+                    valueStyle={{
+                      fontSize: '24px',
+                      fontWeight: 'bold',
+                    }}
                   />
                 </Card>
                 <Card bordered className="bg-green-300">
@@ -50,13 +54,17 @@ const ChartDate = ({
                     value={formatVND(totalObj.sale || 0)}
                     precision={2}
                     loading={loading}
+                    valueStyle={{
+                      fontSize: '24px',
+                      fontWeight: 'bold',
+                    }}
                   />
                 </Card>
                 <Card bordered className="bg-yellow-50">
                   <Statistic
                     title="Lợi nhuận"
                     valueStyle={{
-                      color: totalObj.sale - totalObj.expense > 0 ? 'yellowgreen' : 'red',
+                      color: totalObj.sale - totalObj.expense > 0 ? 'green' : 'red',
                       fontSize: '24px',
                       fontWeight: 'bold',
                     }}
@@ -66,7 +74,7 @@ const ChartDate = ({
                   />
                 </Card>
               </div>
-              <div className="flex items-center justify-center mt-4">
+              <div className="flex md:flex-row flex-col items-center justify-center pt-4 bg-white">
                 <ResponsiveContainer width="100%" height={500} className="border-4">
                   <BarChart data={data}>
                     <CartesianGrid strokeDasharray="3 3" />

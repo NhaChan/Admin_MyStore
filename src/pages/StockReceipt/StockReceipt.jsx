@@ -245,7 +245,7 @@ const StockReceipt = () => {
 
   return (
     <>
-      <Drawer width={500} title="Thêm phiếu nhập" onClose={onClose} open={open}>
+      <Drawer width={500} title="Tạo phiếu nhập" onClose={onClose} open={open}>
         <Form
           onValuesChange={onValuesChange}
           form={form}
@@ -495,7 +495,7 @@ const StockReceipt = () => {
               onChange={(e) => e.target.value === '' && setSearch('')}
             />
             <Button size="large" type="primary" onClick={showDrawer}>
-              <PlusOutlined /> Phiếu nhập
+              <PlusOutlined /> Tạo Phiếu nhập
             </Button>
           </div>
           <Table

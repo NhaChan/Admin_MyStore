@@ -3,7 +3,7 @@ import { Card, DatePicker, Divider, InputNumber, Select, Statistic } from 'antd'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { formatDate, formatVND, getISOString, showError } from '../../services/commonService'
 import expenseService from '../../services/expenseService'
-import { FaUserCircle } from 'react-icons/fa'
+import { FaChartLine, FaEnvelopeOpenText, FaTasks, FaUserCircle } from 'react-icons/fa'
 import { MdAssignmentReturned, MdCancel } from 'react-icons/md'
 import statisticService from '../../services/statisticService'
 import locale from 'antd/es/date-picker/locale/vi_VN'
@@ -303,74 +303,105 @@ const Home = () => {
 
   return (
     <>
-      <div className="grid sm:grid-cols-6 grid-cols-3 gap-4">
-        <Card className=" shadow-sm" bordered>
-          <Statistic
-            title={<span className=" font-semibold">Khách hàng</span>}
-            value={countUser}
-            prefix={
-              <div className="rounded-full bg-blue-200 p-2">
-                <FaUserCircle className="text-2xl  text-blue-500" />
-              </div>
-            }
-          />
-        </Card>
-        <Card className=" shadow-sm" bordered>
-          <Statistic
-            title={<span className=" font-semibold">Đơn hàng</span>}
-            value={countOrder}
-            prefix={
-              <div className="rounded-full bg-orange-200 p-2">
-                <MdAssignmentReturned className="text-2xl  text-orange-500" />
-              </div>
-            }
-          />
-        </Card>
-        <Card className=" shadow-sm" bordered>
-          <Statistic
-            title={<span className=" font-semibold">Đơn hủy</span>}
-            value={countOrderCancel}
-            prefix={
-              <div className="rounded-full bg-red-200 p-2">
-                <MdCancel className="text-2xl  text-red-500" />
-              </div>
-            }
-          />
-        </Card>
-
-        <div className="col-span-3 grid grid-cols-3 gap-2">
+      <div className="grid lg:grid-cols-6 grid-cols-3 sm:grid-cols-1 gap-4">
+        <div className="col-span-3 grid md:grid-cols-3 sm:grid-cols-1 gap-2">
           <div className="col-span-full">
-            <Divider className="my-[1rem]">Doanh thu tháng hiện tại</Divider>
+            <Divider className="border-0"></Divider>
           </div>
-          <Card className="bg-blue-200 shadow-sm" bordered>
-            <Statistic
-              title={<span className=" font-semibold">Doanh thu</span>}
-              value={formatVND(totalMonth.sale)}
-              precision={2}
-              loading={totalLoading}
-              prefix={<DollarTwoTone className="text-2xl" />}
-            />
+          <Card className="shadow-md rounded-lg bg-white">
+            <div className="flex items-center">
+              <div className="rounded-full bg-orange-500 p-3">
+                <FaUserCircle className="text-2xl text-white" />
+              </div>
+              <div className="ml-4">
+                <Statistic
+                  title={<span className="font-semibold text-gray-800">Khách hàng</span>}
+                  value={countUser}
+                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
+                />
+              </div>
+            </div>
           </Card>
-          <Card className="bg-green-300 shadow-sm" bordered>
-            <Statistic
-              title={<span className="text-black font-semibold">Chi tiêu</span>}
-              value={formatVND(totalMonth.expense)}
-              precision={2}
-              loading={totalLoading}
-              prefix={<ArrowDownOutlined className="text-2xl" />}
-            />
+          <Card className="shadow-md rounded-lg bg-white">
+            <div className="flex items-center">
+              <div className="rounded-full bg-green-500 p-3">
+                <MdAssignmentReturned className="text-2xl text-white" />
+              </div>
+              <div className="ml-4">
+                <Statistic
+                  title={<span className="font-semibold text-gray-800">Đơn hàng</span>}
+                  value={countOrder}
+                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
+                />
+              </div>
+            </div>
           </Card>
-          <Card className="bg-orange-100 shadow-sm" bordered>
-            <Statistic
-              title={<span className="font-semibold">Lợi nhuận</span>}
-              valueStyle={{
-                color: 'red',
-                fontWeight: 'bold',
-              }}
-              value={formatVND(totalMonth.sale - totalMonth.expense)}
-              loading={totalLoading}
-              prefix={<PayCircleOutlined className="text-2xl" />}
-            />
+          <Card className="shadow-md rounded-lg bg-white">
+            <div className="flex items-center">
+              <div className="rounded-full bg-red-500 p-3">
+                <MdCancel className="text-2xl text-white" />
+              </div>
+              <div className="ml-4">
+                <Statistic
+                  title={<span className="font-semibold text-gray-800">Đơn hủy</span>}
+                  value={countOrderCancel}
+                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
+                />
+              </div>
+            </div>
+          </Card>
+        </div>
+        <div className="col-span-3 grid md:grid-cols-3 sm:grid-cols-1 gap-2">
+          <div className="col-span-full">
+            <Divider className="my-[0.2rem]">Doanh thu tháng hiện tại</Divider>
+          </div>
+          <Card className="shadow-md rounded-lg relative">
+            <div className="absolute -top-4 left-4 bg-green-500 p-3 rounded-md">
+              <FaChartLine className="text-4xl text-white" />
+            </div>
+            <div className="pt-10">
+              <Statistic
+                title={<span className="font-semibold text-gray-800">Doanh thu</span>}
+                value={formatVND(totalMonth.sale)}
+                valueStyle={{ color: 'green', fontSize: '24px', fontWeight: 'bold' }}
+                precision={2}
+                loading={totalLoading}
+                prefix={<DollarTwoTone className="text-2xl" />}
+              />
+            </div>
+          </Card>
+          <Card className="shadow-md rounded-lg relative">
+            <div className="absolute -top-4 left-4 bg-indigo-500 p-3 rounded-md">
+              <FaTasks className="text-4xl text-white" />
+            </div>
+            <div className=" pt-10">
+              <Statistic
+                title={<span className="font-semibold text-gray-800">Chi tiêu</span>}
+                value={formatVND(totalMonth.expense)}
+                valueStyle={{ color: 'orange', fontSize: '24px', fontWeight: 'bold' }}
+                precision={2}
+                loading={totalLoading}
+                prefix={<ArrowDownOutlined className="text-2xl" />}
+              />
+            </div>
+          </Card>
+          <Card className="shadow-md rounded-lg relative">
+            <div className="absolute -top-4 left-4 bg-red-500 p-3 rounded-md">
+              <FaEnvelopeOpenText className="text-4xl text-white" />
+            </div>
+            <div className=" pt-10">
+              <Statistic
+                title={<span className="font-semibold text-gray-800">Lợi nhuận</span>}
+                value={formatVND(totalMonth.sale - totalMonth.expense)}
+                valueStyle={{
+                  color: totalMonth.sale - totalMonth.expense > 0 ? 'green' : 'red',
+                  fontSize: '24px',
+                  fontWeight: 'bold',
+                }}
+                loading={totalLoading}
+                prefix={<PayCircleOutlined className="text-2xl" />}
+              />
+            </div>
           </Card>
         </div>
       </div>
