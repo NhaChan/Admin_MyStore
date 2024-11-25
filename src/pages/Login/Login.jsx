@@ -23,10 +23,10 @@ const Login = () => {
 
       if (res.data?.roles?.some((role) => allowedRoles.includes(role))) {
         dispatch(authActions.LOGIN(res.data?.roles))
-        notification.success({ message: 'Đăng nhập thành công.' })
+        notification.success({ message: 'Đăng nhập thành công.', placement: 'top' })
         navigate('/home')
       } else {
-        notification.error({ message: 'Không có quyền truy cập' })
+        notification.error({ message: 'Không có quyền truy cập', placement: 'top' })
       }
     } catch (error) {
       showError(error)

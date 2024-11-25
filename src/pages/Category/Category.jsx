@@ -118,7 +118,8 @@ const Category = () => {
       form.resetFields()
       setFileList([])
       notification.success({
-        message: `Thêm thương hiệu thành công.`,
+        message: `Thêm danh mục thành công.`,
+        placement: 'top',
       })
     } catch (error) {
       showError(error)
@@ -168,6 +169,7 @@ const Category = () => {
 
       notification.success({
         message: `Thành công.`,
+        placement: 'top',
       })
       setUpdate(!update)
       setIsUpdate(false)

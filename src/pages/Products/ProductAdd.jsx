@@ -91,7 +91,7 @@ const ProductAdd = () => {
 
       await productService.addProduct(formData)
 
-      notification.success({ message: 'Thêm sản phẩm thành công.' })
+      notification.success({ message: 'Thêm sản phẩm thành công.', placement: 'top' })
       // navigate(-1)
       setUpdate(false)
       form.resetFields()
@@ -137,7 +137,7 @@ const ProductAdd = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Form.Item
-              label="Giá:"
+              label="Giá bán:"
               name="price"
               rules={[
                 {
@@ -176,7 +176,7 @@ const ProductAdd = () => {
                 },
               ]}
             >
-              <InputNumber className="w-full" size="large" min={0} changeOnWheel />
+              <InputNumber disabled className="w-full" size="large" min={0} changeOnWheel />
             </Form.Item>
           </div>
 

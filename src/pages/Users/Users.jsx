@@ -217,7 +217,7 @@ const User = () => {
       // console.log(items)
       const add = await userService.addUser(items)
       // console.log(add)
-      notification.success({ message: 'Thêm tài khoản thành công' })
+      notification.success({ message: 'Thêm tài khoản thành công', placement: 'top' })
       setIsModalOpen(false)
       form.resetFields()
       setData((prevData) => [add.data, ...prevData])
@@ -256,7 +256,7 @@ const User = () => {
       }
       const res = await userService.updateUser(userId, updatedData)
       console.log(res.data)
-      notification.success({ message: 'Cập nhật thông tin thành công.' })
+      notification.success({ message: 'Cập nhật thông tin thành công.', placement: 'top' })
       setData((prevData) =>
         prevData.map((item) => (item.id === userId ? { ...item, ...res.data } : item)),
       )
@@ -300,6 +300,7 @@ const User = () => {
         notification.success({
           message: 'Thành công',
           description: 'Đã khóa tài khoản',
+          placement: 'top',
         })
       } catch (error) {
         showError(error)
@@ -318,6 +319,7 @@ const User = () => {
       notification.success({
         message: 'Thành công',
         description: 'Đã mở tài khoản',
+        placement: 'top',
       })
     } catch (error) {
       showError(error)
@@ -332,7 +334,7 @@ const User = () => {
   //     await userService.deleteUser(id)
   //     const newData = data.filter((item) => !(item.id === id))
   //     setData(newData)
-  //     notification.success({ message: 'Xóa thành công' })
+  //     notification.success({ message: 'Xóa thành công', placement: 'top' })
   //   } catch (error) {
   //     showError(error)
   //   } finally {

@@ -106,7 +106,7 @@ const ProductDetail = () => {
 
       await productService.updateProduct(id, formData)
 
-      notification.success({ message: 'Cập nhật sản phẩm thành công.' })
+      notification.success({ message: 'Cập nhật sản phẩm thành công.', placement: 'top' })
       setUpdate(false)
       form.resetFields()
       setFileList([])
@@ -152,7 +152,7 @@ const ProductDetail = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Form.Item
-              label="Giá:"
+              label="Giá bán:"
               name="price"
               rules={[
                 {
@@ -191,7 +191,7 @@ const ProductDetail = () => {
                 },
               ]}
             >
-              <InputNumber className="w-full" size="large" min={0} changeOnWheel />
+              <InputNumber disabled className="w-full" size="large" min={0} changeOnWheel />
             </Form.Item>
           </div>
 

@@ -22,6 +22,7 @@ import TextArea from 'antd/es/input/TextArea'
 import { FaRegEye } from 'react-icons/fa'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
 
 const StockReceipt = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -245,7 +246,7 @@ const StockReceipt = () => {
 
   return (
     <>
-      <Drawer width={500} title="Tạo phiếu nhập" onClose={onClose} open={open}>
+      <Drawer width={500} title="Tạo phiếu nhập" onClose={onClose} open={open} maskClosable={false}>
         <Form
           onValuesChange={onValuesChange}
           form={form}
@@ -284,6 +285,14 @@ const StockReceipt = () => {
               style={{ height: 70, resize: 'none' }}
             />
           </Form.Item>
+          <div className="pb-2">
+            <Link to="/add-products">
+              <Button danger>
+                <PlusOutlined /> Nhập sản phẩm mới
+              </Button>
+            </Link>
+          </div>
+
           <Form.List name="items">
             {(fields, { add, remove }) => (
               <div
@@ -308,7 +317,7 @@ const StockReceipt = () => {
                     }
                   >
                     <Form.Item
-                      label="Tên sản phẩm"
+                      label="Tên sản phẩm (Đã có sẵn)"
                       rules={[
                         {
                           required: true,

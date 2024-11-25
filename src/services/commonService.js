@@ -13,17 +13,19 @@ export const showError = (error) => {
     notification.warning({
       message: 'Cảnh báo',
       description: 'Bạn không có quyền truy cập vào trang này.',
+      placement: 'top',
       duration: 3,
     })
   } else {
     notification.error({
       message: 'Lỗi',
       description: errorMessage,
+      placement: 'top',
     })
   }
   // notification.error({
   //   message: 'Error',
-  //   description: errorMessage,
+  //   description: errorMessage, placement: 'top'
   // })
 }
 

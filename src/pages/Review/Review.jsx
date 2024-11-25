@@ -86,7 +86,7 @@ const Review = () => {
   useEffect(() => {
     const fetchName = async () => {
       try {
-        const res = await productService.getName(1,5, )
+        const res = await productService.getName(1, 5)
         console.log(res.data)
         setNameProduct(res.data)
       } catch (error) {
@@ -123,6 +123,7 @@ const Review = () => {
       setReviews(newData)
       notification.success({
         message: 'Xóa thành công',
+        placement: 'top',
       })
     } catch (error) {
       showError(error)

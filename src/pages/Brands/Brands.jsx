@@ -113,6 +113,7 @@ const Brands = () => {
         setFileList([])
         notification.success({
           message: `Thêm thương hiệu thành công.`,
+          placement: 'top',
         })
       } catch (error) {
         showError(error)
@@ -160,6 +161,7 @@ const Brands = () => {
 
       notification.success({
         message: `Thành công.`,
+        placement: 'top',
       })
       setUpdate(!update)
       setIsUpdate(false)
@@ -180,6 +182,7 @@ const Brands = () => {
       setBrands(newData)
       notification.success({
         message: 'Xóa thành công',
+        placement: 'top',
       })
     } catch (error) {
       showError(error)

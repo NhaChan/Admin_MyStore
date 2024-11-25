@@ -140,7 +140,7 @@ const Products = () => {
     try {
       const data = { enable: value }
       await productService.updateEnable(id, data)
-      notification.success({ message: 'cập nhật thành công.' })
+      notification.success({ message: 'cập nhật thành công.', placement: 'top' })
     } catch (error) {
       showError(error)
     }
@@ -154,6 +154,7 @@ const Products = () => {
       setData(newData)
       notification.success({
         message: 'Xóa thành công',
+        placement: 'top',
       })
     } catch (error) {
       showError(error)
