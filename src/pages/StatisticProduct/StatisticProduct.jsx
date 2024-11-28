@@ -42,7 +42,6 @@ const StatisticProduct = () => {
   useEffect(() => {
     const fetchName = async () => {
       search && setLoading(true)
-
       try {
         const res = await productService.getName(search)
         // console.log(res.data)

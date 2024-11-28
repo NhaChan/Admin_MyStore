@@ -1,7 +1,7 @@
-import { Avatar, Badge, Flex, Popconfirm, Typography } from 'antd'
+import { Avatar, Flex, Popconfirm, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { LogoutOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { LogoutOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../App'
 import authService from '../../../services/authService'
 import authActions from '../../../services/authAction'
@@ -31,14 +31,14 @@ const Header = () => {
           </Typography.Title>
         )}
         <Flex className=" items-center space-x-3  text-blue-600">
-          <Link to="/chat">
+          {/* <Link to="/chat">
             <Badge count={1}>
               <MessageOutlined className="p-2 border-2 rounded-md text-lg hover:bg-gray-300" />
             </Badge>
           </Link>
           <Badge dot>
             <NotificationOutlined className="p-2 border-2 rounded-md text-lg  hover:bg-gray-300" />
-          </Badge>
+          </Badge> */}
           <Popconfirm title="Bạn có chắc muốn đăng xuất?" onConfirm={handleLogout}>
             <Avatar
               icon={<LogoutOutlined />}

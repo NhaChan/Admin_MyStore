@@ -30,11 +30,11 @@ import { FaHistory } from 'react-icons/fa'
 export const navigateItems = [
   { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
   { key: '/statistic', icon: <FcStatistics />, label: 'Thống kê sản phẩm' },
-  { key: '/users', icon: <UserOutlined />, label: 'Người dùng' },
   { key: '/products', icon: <ReadOutlined />, label: 'Sản phẩm' },
+  { key: '/users', icon: <UserOutlined />, label: 'Người dùng' },
   {
     key: '1',
-    label: 'Sản Phẩm',
+    label: 'Quản lý chung',
     icon: <ProfileOutlined />,
     children: [
       { key: '/brands', label: 'Thương hiệu' },
@@ -51,7 +51,7 @@ export const navigateCSKH = [
   { key: '/home', icon: <PieChartOutlined />, label: 'Thống kê' },
   {
     key: '1',
-    label: 'Sản Phẩm',
+    label: 'Quản lý chung',
     icon: <ProfileOutlined />,
     children: [
       { key: '/brands', label: 'Thương hiệu' },

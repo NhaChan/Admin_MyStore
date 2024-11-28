@@ -8,6 +8,8 @@ import reviewService from '../../services/reviewService'
 
 const Review = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [search, setSearch] = useState('')
   const [reviews, setReviews] = useState([])
   const [totalItems, setTotalItems] = useState(0)
   const [page, setPage] = useState(1)
@@ -83,20 +85,28 @@ const Review = () => {
     },
   ]
 
+  const handleSearch = (key) => key && key !== search && setSearch(key)
+
   useEffect(() => {
     const fetchName = async () => {
+      search && setLoading(true)
       try {
-        const res = await productService.getName(1, 5)
-        console.log(res.data)
+        const res = await productService.getName(search)
+        // console.log(res.data)
         setNameProduct(res.data)
       } catch (error) {
         showError(error)
       } finally {
-        // setTotalLoading(false)
+        setLoading(false)
       }
     }
-    fetchName()
-  }, [])
+    const debounceFetch = setTimeout(() => {
+      fetchName()
+    }, 300)
+
+    return () => clearTimeout(debounceFetch)
+    // fetchName()
+  }, [search])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,14 +147,15 @@ const Review = () => {
       <BreadcrumbLink breadcrumb={breadcrumb} />
       <div className="p-4 drop-shadow rounded-lg bg-white space-y-4">
         <Select
-          //   loading={loading}
+          loading={loading}
           className="w-1/2"
           value={selectId}
           onChange={setSelectId}
-          optionFilterProp="label"
+          // optionFilterProp="label"
+          onSearch={handleSearch}
           showSearch={true}
           size="large"
-          placeholder="Chọn sản phẩm muốn thống kê"
+          placeholder="Chọn sản phẩm để xem đánh giá"
         >
           {nameProduct.map((name) => (
             <Select.Option key={name.id} value={name.id} label={name.name}>

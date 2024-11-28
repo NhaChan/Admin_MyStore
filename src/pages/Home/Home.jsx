@@ -1,9 +1,9 @@
-import { ArrowDownOutlined, DollarTwoTone, PayCircleOutlined } from '@ant-design/icons'
+import { ArrowDownOutlined, ArrowUpOutlined, DollarTwoTone } from '@ant-design/icons'
 import { Card, DatePicker, Divider, InputNumber, Select, Statistic } from 'antd'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { formatDate, formatVND, getISOString, showError } from '../../services/commonService'
 import expenseService from '../../services/expenseService'
-import { FaChartLine, FaEnvelopeOpenText, FaTasks, FaUserCircle } from 'react-icons/fa'
+import { FaUserCircle } from 'react-icons/fa'
 import { MdAssignmentReturned, MdCancel } from 'react-icons/md'
 import statisticService from '../../services/statisticService'
 import locale from 'antd/es/date-picker/locale/vi_VN'
@@ -311,7 +311,7 @@ const Home = () => {
           <Card className="shadow-md rounded-lg bg-white">
             <div className="flex items-center">
               <div className="rounded-full bg-orange-500 p-3">
-                <FaUserCircle className="text-2xl text-white" />
+                <FaUserCircle className="text-xl text-white" />
               </div>
               <div className="ml-4">
                 <Statistic
@@ -325,7 +325,7 @@ const Home = () => {
           <Card className="shadow-md rounded-lg bg-white">
             <div className="flex items-center">
               <div className="rounded-full bg-green-500 p-3">
-                <MdAssignmentReturned className="text-2xl text-white" />
+                <MdAssignmentReturned className="text-xl text-white" />
               </div>
               <div className="ml-4">
                 <Statistic
@@ -339,7 +339,7 @@ const Home = () => {
           <Card className="shadow-md rounded-lg bg-white">
             <div className="flex items-center">
               <div className="rounded-full bg-red-500 p-3">
-                <MdCancel className="text-2xl text-white" />
+                <MdCancel className="text-xl text-white" />
               </div>
               <div className="ml-4">
                 <Statistic
@@ -355,53 +355,53 @@ const Home = () => {
           <div className="col-span-full">
             <Divider className="my-[0.2rem]">Doanh thu tháng hiện tại</Divider>
           </div>
-          <Card className="shadow-md rounded-lg relative">
-            <div className="absolute -top-4 left-4 bg-green-500 p-3 rounded-md">
-              <FaChartLine className="text-4xl text-white" />
-            </div>
-            <div className="pt-10">
-              <Statistic
-                title={<span className="font-semibold text-gray-800">Doanh thu</span>}
-                value={formatVND(totalMonth.sale)}
-                valueStyle={{ color: 'green', fontSize: '24px', fontWeight: 'bold' }}
-                precision={2}
-                loading={totalLoading}
-                prefix={<DollarTwoTone className="text-2xl" />}
-              />
-            </div>
+
+          <Card className="shadow-md bg-white" bordered>
+            <Statistic
+              title={<span className=" font-semibold">Chi tiêu</span>}
+              value={formatVND(totalMonth.expense)}
+              precision={2}
+              loading={totalLoading}
+              valueStyle={{
+                color: 'indigo',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
+              prefix={<ArrowDownOutlined className="text-2xl" />}
+            />
           </Card>
-          <Card className="shadow-md rounded-lg relative">
-            <div className="absolute -top-4 left-4 bg-indigo-500 p-3 rounded-md">
-              <FaTasks className="text-4xl text-white" />
-            </div>
-            <div className=" pt-10">
-              <Statistic
-                title={<span className="font-semibold text-gray-800">Chi tiêu</span>}
-                value={formatVND(totalMonth.expense)}
-                valueStyle={{ color: 'orange', fontSize: '24px', fontWeight: 'bold' }}
-                precision={2}
-                loading={totalLoading}
-                prefix={<ArrowDownOutlined className="text-2xl" />}
-              />
-            </div>
+          <Card className="shadow-md bg-white" bordered>
+            <Statistic
+              title={<span className="text-black font-semibold">Doanh thu</span>}
+              value={formatVND(totalMonth.sale)}
+              precision={2}
+              loading={totalLoading}
+              valueStyle={{
+                color: 'red',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
+              prefix={<DollarTwoTone className="text-2xl" />}
+            />
           </Card>
-          <Card className="shadow-md rounded-lg relative">
-            <div className="absolute -top-4 left-4 bg-red-500 p-3 rounded-md">
-              <FaEnvelopeOpenText className="text-4xl text-white" />
-            </div>
-            <div className=" pt-10">
-              <Statistic
-                title={<span className="font-semibold text-gray-800">Lợi nhuận</span>}
-                value={formatVND(totalMonth.sale - totalMonth.expense)}
-                valueStyle={{
-                  color: totalMonth.sale - totalMonth.expense > 0 ? 'green' : 'red',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                }}
-                loading={totalLoading}
-                prefix={<PayCircleOutlined className="text-2xl" />}
-              />
-            </div>
+          <Card className="shadow-md bg-white" bordered>
+            <Statistic
+              title={<span className="font-semibold">Lợi nhuận</span>}
+              valueStyle={{
+                color: totalMonth.sale - totalMonth.expense > 0 ? 'green' : 'red',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
+              value={formatVND(totalMonth.sale - totalMonth.expense)}
+              loading={totalLoading}
+              prefix={
+                totalMonth.sale - totalMonth.expense > 0 ? (
+                  <ArrowUpOutlined className="text-2xl" />
+                ) : (
+                  <ArrowDownOutlined className="text-2xl" />
+                )
+              }
+            />
           </Card>
         </div>
       </div>

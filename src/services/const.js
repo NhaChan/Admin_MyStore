@@ -18,7 +18,7 @@ export const CancelStatus = 6
 export const Role = {
   // Admin: 'Quản trị viên',
   Warehouser: 'Nhân viên quản lý kho',
-  CSKH: 'Nhân viên chăm sóc khách hàng',
+  CSKH: 'Nhân viên quản lý chung',
   Statist: 'Nhân viên thống kê',
   User: 'Khách hàng',
 }
