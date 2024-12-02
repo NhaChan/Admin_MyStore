@@ -14,7 +14,7 @@ const Review = () => {
   const [totalItems, setTotalItems] = useState(0)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [selectId, setSelectId] = useState(1)
+  const [selectId, setSelectId] = useState(null)
   const [nameProduct, setNameProduct] = useState([])
   const [loadingDelete, setLoadingDelete] = useState(false)
 
@@ -85,7 +85,7 @@ const Review = () => {
     },
   ]
 
-  const handleSearch = (key) => key && key !== search && setSearch(key)
+  const handleSearch = (key) => key && key !== search && setSearch(key || '')
 
   useEffect(() => {
     const fetchName = async () => {
@@ -94,6 +94,9 @@ const Review = () => {
         const res = await productService.getName(search)
         // console.log(res.data)
         setNameProduct(res.data)
+        if (res.data.length > 0 && !selectId) {
+          setSelectId(res.data[0].id) // Chọn sản phẩm đầu tiên
+        }
       } catch (error) {
         showError(error)
       } finally {
@@ -106,9 +109,10 @@ const Review = () => {
 
     return () => clearTimeout(debounceFetch)
     // fetchName()
-  }, [search])
+  }, [search, selectId])
 
   useEffect(() => {
+    if (!selectId) return
     const fetchData = async () => {
       setIsLoading(true)
       try {
@@ -153,6 +157,7 @@ const Review = () => {
           onChange={setSelectId}
           // optionFilterProp="label"
           onSearch={handleSearch}
+          filterOption={false}
           showSearch={true}
           size="large"
           placeholder="Chọn sản phẩm để xem đánh giá"

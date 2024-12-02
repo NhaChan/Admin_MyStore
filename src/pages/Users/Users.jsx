@@ -436,6 +436,7 @@ const User = () => {
           >
             <Input
               prefix={<TfiEmail className="text-gray-300 mx-1" />}
+              disabled={isEditMode}
               placeholder="Email"
               size="large"
               className="text-gray-600"

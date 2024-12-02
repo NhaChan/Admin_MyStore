@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
 } from 'recharts'
 import { formatVND } from '../../services/commonService'
 
@@ -94,17 +94,29 @@ const ChartDate = ({
                   </BarChart>
                 </ResponsiveContainer>
                 <ResponsiveContainer width="100%" height={500} className="border-4">
-                  <LineChart
+                  <AreaChart
                     data={dataWithProfit}
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                   >
+                    <defs>
+                      <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0033FF" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#0033FF" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <XAxis dataKey="label" />
                     <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="Profit" stroke="#0000FF" name="Lợi nhuận" />
-                  </LineChart>
+                    <Area
+                      type="monotone"
+                      dataKey="Profit"
+                      stroke="#0033FF"
+                      fill="url(#colorProfit)"
+                      name="Lợi nhuận"
+                    />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </>
