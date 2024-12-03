@@ -1,10 +1,15 @@
-import { ArrowDownOutlined, ArrowUpOutlined, DollarTwoTone } from '@ant-design/icons'
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  DollarTwoTone,
+  ExclamationCircleTwoTone,
+  IdcardTwoTone,
+  PieChartTwoTone,
+} from '@ant-design/icons'
 import { Card, DatePicker, Divider, InputNumber, Select, Statistic } from 'antd'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { formatDate, formatVND, getISOString, showError } from '../../services/commonService'
 import expenseService from '../../services/expenseService'
-import { FaUserCircle } from 'react-icons/fa'
-import { MdAssignmentReturned, MdCancel } from 'react-icons/md'
 import statisticService from '../../services/statisticService'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import ChartDate from '../../components/Charts/ChartDate'
@@ -65,7 +70,7 @@ const Home = () => {
   const [totalObj, setTotalObj] = useState({})
   // const [total, setTotal] = useState(0)
   const [rangeDate, setRangeDate] = useState(null)
-  const [statisticType, setStatisticType] = useState('date')
+  const [statisticType, setStatisticType] = useState('monthYear')
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedMonth, setSelectedMonth] = useState(null)
   const [totalMonthYear, setTotalMonthYear] = useState({})
@@ -308,72 +313,40 @@ const Home = () => {
           <div className="col-span-full">
             <Divider className="border-0"></Divider>
           </div>
-          <Card className="shadow-md rounded-lg bg-white">
-            <div className="flex items-center">
-              <div className="rounded-full bg-orange-500 p-3">
-                <FaUserCircle className="text-xl text-white" />
-              </div>
-              <div className="ml-4">
-                <Statistic
-                  title={<span className="font-semibold text-gray-800">Khách hàng</span>}
-                  value={countUser}
-                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
-                />
-              </div>
-            </div>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
+            <Statistic
+              title="Khách hàng"
+              value={countUser}
+              precision={0}
+              prefix={<IdcardTwoTone className="text-4xl" />}
+            />
           </Card>
-          <Card className="shadow-md rounded-lg bg-white">
-            <div className="flex items-center">
-              <div className="rounded-full bg-green-500 p-3">
-                <MdAssignmentReturned className="text-xl text-white" />
-              </div>
-              <div className="ml-4">
-                <Statistic
-                  title={<span className="font-semibold text-gray-800">Đơn hàng</span>}
-                  value={countOrder}
-                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
-                />
-              </div>
-            </div>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
+            <Statistic
+              title="Đơn hàng"
+              value={countOrder ?? 0}
+              precision={0}
+              prefix={<PieChartTwoTone className="text-4xl" />}
+            />
           </Card>
-          <Card className="shadow-md rounded-lg bg-white">
-            <div className="flex items-center">
-              <div className="rounded-full bg-red-500 p-3">
-                <MdCancel className="text-xl text-white" />
-              </div>
-              <div className="ml-4">
-                <Statistic
-                  title={<span className="font-semibold text-gray-800">Đơn hủy</span>}
-                  value={countOrderCancel}
-                  valueStyle={{ fontSize: '24px', fontWeight: 'bold' }}
-                />
-              </div>
-            </div>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
+            <Statistic
+              title="Đơn bị hủy"
+              value={countOrderCancel ?? 0}
+              precision={0}
+              prefix={<ExclamationCircleTwoTone className="text-4xl" />}
+            />
           </Card>
         </div>
         <div className="col-span-3 grid md:grid-cols-3 sm:grid-cols-1 gap-2">
           <div className="col-span-full">
-            <Divider className="my-[0.2rem]">Doanh thu tháng hiện tại</Divider>
+            <Divider style={{ margin: '0.2rem 0' }}>Doanh thu tháng hiện tại</Divider>
           </div>
 
-          <Card className="shadow-md bg-white" bordered>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
             <Statistic
-              title={<span className=" font-semibold">Chi tiêu</span>}
+              title="Chi tiêu"
               value={formatVND(totalMonth.expense)}
-              precision={2}
-              loading={totalLoading}
-              valueStyle={{
-                color: 'indigo',
-                fontWeight: 'bold',
-                fontSize: '20px',
-              }}
-              prefix={<ArrowDownOutlined className="text-2xl" />}
-            />
-          </Card>
-          <Card className="shadow-md bg-white" bordered>
-            <Statistic
-              title={<span className="text-black font-semibold">Doanh thu</span>}
-              value={formatVND(totalMonth.sale)}
               precision={2}
               loading={totalLoading}
               valueStyle={{
@@ -381,12 +354,26 @@ const Home = () => {
                 fontWeight: 'bold',
                 fontSize: '20px',
               }}
+              prefix={<ArrowDownOutlined className="text-2xl" />}
+            />
+          </Card>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
+            <Statistic
+              title="Doanh thu"
+              value={formatVND(totalMonth.sale)}
+              precision={2}
+              loading={totalLoading}
+              valueStyle={{
+                color: 'green',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
               prefix={<DollarTwoTone className="text-2xl" />}
             />
           </Card>
-          <Card className="shadow-md bg-white" bordered>
+          <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}>
             <Statistic
-              title={<span className="font-semibold">Lợi nhuận</span>}
+              title="Lợi nhuận"
               valueStyle={{
                 color: totalMonth.sale - totalMonth.expense > 0 ? 'green' : 'red',
                 fontWeight: 'bold',
@@ -408,7 +395,7 @@ const Home = () => {
       <div className="pt-4">
         <Select
           size="large"
-          defaultValue="date"
+          defaultValue="monthYear"
           onChange={handleStatisticTypeChange}
           style={{ width: 200, marginBottom: 16 }}
         >

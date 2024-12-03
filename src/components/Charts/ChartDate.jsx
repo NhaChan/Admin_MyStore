@@ -35,8 +35,8 @@ const ChartDate = ({
           {loading && <Skeleton />}
           {!loading && data.length > 0 && (
             <>
-              <div className="grid sm:grid-cols-3 gap-4">
-                <Card bordered className="bg-indigo-200">
+              <div className="grid sm:grid-cols-3 gap-8">
+                <Card bordered className="bg-indigo-200 drop-shadow rounded-sm">
                   <Statistic
                     title="Chi tiêu"
                     value={formatVND(totalObj.expense || 0)}
@@ -48,7 +48,7 @@ const ChartDate = ({
                     }}
                   />
                 </Card>
-                <Card bordered className="bg-green-300">
+                <Card bordered className="bg-green-300 drop-shadow rounded-sm">
                   <Statistic
                     title="Doanh thu"
                     value={formatVND(totalObj.sale || 0)}
@@ -60,7 +60,7 @@ const ChartDate = ({
                     }}
                   />
                 </Card>
-                <Card bordered className="bg-yellow-50">
+                <Card bordered className="bg-yellow-50 drop-shadow rounded-sm">
                   <Statistic
                     title="Lợi nhuận"
                     valueStyle={{
@@ -107,7 +107,7 @@ const ChartDate = ({
                     <XAxis dataKey="label" />
                     <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip />
+                    <Tooltip formatter={(value) => [formatVND(value)]} />
                     <Legend />
                     <Area
                       type="monotone"

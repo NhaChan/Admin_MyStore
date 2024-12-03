@@ -15,7 +15,7 @@ const StatisticProduct = () => {
   const [loading, setLoading] = useState(false)
   const [expenseData, setExpenseData] = useState([])
   const [saleData, setSaleData] = useState([])
-  const [statisticType, setStatisticType] = useState('date')
+  const [statisticType, setStatisticType] = useState('monthYear')
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedMonth, setSelectedMonth] = useState(null)
   const [totalMonthYear, setTotalMonthYear] = useState({})
@@ -173,7 +173,7 @@ const StatisticProduct = () => {
       <div className="pt-4 flex md:flex-row flex-col space-x-4">
         <Select
           size="large"
-          defaultValue="date"
+          defaultValue="monthYear"
           onChange={handleStatisticTypeChange}
           style={{ width: 200, marginBottom: 16 }}
         >

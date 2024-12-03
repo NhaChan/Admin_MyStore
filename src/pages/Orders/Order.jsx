@@ -16,7 +16,6 @@ import {
   Table,
   Tabs,
   Tag,
-  Tooltip,
 } from 'antd'
 import orderService from '../../services/orderService'
 import BreadcrumbLink from '../../components/BreadcrumbLink'
@@ -157,11 +156,9 @@ const Order = () => {
                 title="Xác nhận gọi đơn vị vận chuyển!"
                 onConfirm={() => showModal(record.id)}
               >
-                <Tooltip title="Giao cho đơn vị vận chuyển">
-                  <Button className="m-1" type="dashed" danger>
-                    Giao đơn
-                  </Button>
-                </Tooltip>
+                <Button className="m-1" type="dashed" danger>
+                  Giao đơn
+                </Button>
               </Popconfirm>
             )
           )}
@@ -284,6 +281,7 @@ const Order = () => {
     } catch (error) {
       showError(error)
     } finally {
+      setLoading(false)
       setIsModalOpen(false)
     }
   }
@@ -313,9 +311,13 @@ const Order = () => {
         open={isModalOpen}
         onOk={handleShipping}
         onCancel={handleCancel}
+        confirmLoading={loading}
       >
         <Divider />
-        <Form form={form}>
+        <Form
+          form={form}
+          initialValues={{ length: 1, weight: 1, height: 1, width: 1, required_note: 0 }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Form.Item
               label="Dài"

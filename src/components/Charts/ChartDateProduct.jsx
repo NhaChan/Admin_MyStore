@@ -21,8 +21,8 @@ const ChartDateProduct = ({ data, totalDate, loading }) => {
   return (
     <>
       <Divider>Thống kê Doanh thu và Chi tiêu</Divider>
-      <div className="grid sm:grid-cols-3 gap-4">
-        <Card bordered className="bg-indigo-200">
+      <div className="grid sm:grid-cols-3 gap-8">
+        <Card bordered className="bg-indigo-200 drop-shadow rounded-sm">
           <Statistic
             title="Chi tiêu"
             value={formatVND(totalDate.expense || 0)}
@@ -30,7 +30,7 @@ const ChartDateProduct = ({ data, totalDate, loading }) => {
             loading={loading}
           />
         </Card>
-        <Card bordered className="bg-green-300">
+        <Card bordered className="bg-green-300 drop-shadow rounded-sm">
           <Statistic
             title="Doanh thu"
             value={formatVND(totalDate.sale || 0)}
@@ -38,11 +38,11 @@ const ChartDateProduct = ({ data, totalDate, loading }) => {
             loading={loading}
           />
         </Card>
-        <Card bordered className="bg-yellow-50">
+        <Card bordered className="bg-sky-100 drop-shadow rounded-sm">
           <Statistic
             title="Lợi nhuận"
             valueStyle={{
-              color: totalDate.sale - totalDate.expense > 0 ? 'yellowgreen' : 'red',
+              color: totalDate.sale - totalDate.expense > 0 ? 'green' : 'red',
               fontSize: '24px',
               fontWeight: 'bold',
             }}
@@ -80,7 +80,7 @@ const ChartDateProduct = ({ data, totalDate, loading }) => {
             <XAxis dataKey="label" />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <Tooltip formatter={(value) => [formatVND(value)]} />
             <Legend />
             <Area
               type="monotone"

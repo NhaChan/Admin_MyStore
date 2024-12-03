@@ -117,7 +117,7 @@ const StockReceipt = () => {
         const res = await stockService.getAllStock(currentPage, currentPageSize, search)
         const resName = await productService.getName(searchName)
         setProductNames(resName.data)
-        // console.log(resName)
+        // console.log(productNames)
         // console.log('stock', res.data)
         setData(res.data.items)
         setTotalItems(res.data?.totalItems)
@@ -141,22 +141,22 @@ const StockReceipt = () => {
   }
 
   const handleAdd = async (values) => {
+    console.log(values)
     const stockReceiptData = {
       entryDate: values.entryDate ? values.entryDate.format() : '',
       note: values.note || '',
       total: values.total,
       stockReceiptProducts: values.items.map((item) => ({
-        productId: productNames.find((product) => product.name === item.name)?.id,
+        productId: item.name,
         quantity: item.quantity,
         originPrice: item.originPrice,
       })),
     }
-    // console.log(stockReceiptData)
+    console.log(stockReceiptData)
     try {
       const res = await stockService.addStock(stockReceiptData)
       // console.log(res)
       setData((prevData) => [res.data, ...prevData])
-
       form.resetFields()
       setOpen(false)
     } catch (error) {
@@ -331,11 +331,12 @@ const StockReceipt = () => {
                         // optionFilterProp="label"
                         allowClear
                         onSearch={handleSearchName}
+                        filterOption={false}
                         showSearch={true}
                         // defaultValue={productNames.productName}
                       >
                         {productNames.map((product) => (
-                          <Select.Option key={product.id} value={product.name} label={product.name}>
+                          <Select.Option key={product.id} value={product.id} label={product.name}>
                             {product.name}
                           </Select.Option>
                         ))}

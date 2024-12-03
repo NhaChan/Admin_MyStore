@@ -22,8 +22,9 @@ const MonthYearStatistic = ({ data, totalMonthYear = { sale: 0, expense: 0 }, lo
   return (
     <>
       <Divider>Thống kê Doanh thu và Chi tiêu</Divider>
-      <div className="grid sm:grid-cols-3 gap-4">
-        <Card bordered className="bg-indigo-200">
+      <div className="grid sm:grid-cols-3 gap-8">
+        <Card bordered className="drop-shadow rounded-sm bg-indigo-200">
+          {/* <Card loading={loading} className="drop-shadow rounded-sm" bordered={false}> */}
           <Statistic
             title="Chi tiêu"
             value={formatVND(totalMonthYear.expense || 0)}
@@ -31,7 +32,7 @@ const MonthYearStatistic = ({ data, totalMonthYear = { sale: 0, expense: 0 }, lo
             loading={loading}
           />
         </Card>
-        <Card bordered className="bg-green-300">
+        <Card bordered className="drop-shadow rounded-sm bg-green-300">
           <Statistic
             title="Doanh thu"
             value={formatVND(totalMonthYear.sale || 0)}
@@ -40,11 +41,11 @@ const MonthYearStatistic = ({ data, totalMonthYear = { sale: 0, expense: 0 }, lo
           />
         </Card>
 
-        <Card bordered className="bg-yellow-50">
+        <Card bordered className="drop-shadow rounded-sm bg-sky-100">
           <Statistic
             title="Lợi nhuận"
             valueStyle={{
-              color: totalMonthYear.sale - totalMonthYear.expense > 0 ? 'yellowgreen' : 'red',
+              color: totalMonthYear.sale - totalMonthYear.expense > 0 ? 'green' : 'red',
               fontSize: '24px',
               fontWeight: 'bold',
             }}
@@ -81,7 +82,7 @@ const MonthYearStatistic = ({ data, totalMonthYear = { sale: 0, expense: 0 }, lo
             <XAxis dataKey="label" />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <Tooltip formatter={(value) => [formatVND(value)]} />
             <Legend />
             <Area
               type="monotone"

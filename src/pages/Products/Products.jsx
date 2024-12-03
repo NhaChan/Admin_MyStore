@@ -62,6 +62,12 @@ const Products = () => {
     {
       title: 'Số lượng',
       dataIndex: 'quantity',
+      sorter: (a, b) => a.quantity - b.quantity,
+    },
+    {
+      title: 'Lượt bán',
+      dataIndex: 'sold',
+      sorter: (a, b) => a.sold - b.sold,
     },
     {
       title: 'Danh mục',
