@@ -36,6 +36,15 @@ const getStatus = async (page, pageSize, search, status) =>
     },
   })
 
+const getSoldProductMax = async (page, pageSize) =>
+  await axios.get(API_URL + '/descending-by-sold-current-month', {
+    headers: authHeader(),
+    params: {
+      page: page,
+      pageSize: pageSize,
+    },
+  })
+
 const orderService = {
   getAll,
   getOrder,
@@ -44,6 +53,7 @@ const orderService = {
   nextStatus,
   shipping,
   getStatus,
+  getSoldProductMax,
 }
 
 export default orderService

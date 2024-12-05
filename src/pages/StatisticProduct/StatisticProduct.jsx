@@ -1,11 +1,11 @@
-import { Card, DatePicker, InputNumber, Select, Spin, Statistic } from 'antd'
+import { DatePicker, Divider, InputNumber, Pagination, Select, Spin, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { formatDate, showError } from '../../services/commonService'
-import { MdAssignmentReturned } from 'react-icons/md'
 import statisticService from '../../services/statisticService'
 import MonthYearStatistic from '../../components/Charts/ChartMonthYear'
 import productService from '../../services/products/productService'
 import ChartDateProduct from '../../components/Charts/ChartDateProduct'
+import orderService from '../../services/orderService'
 
 const { RangePicker } = DatePicker
 
@@ -25,6 +25,25 @@ const StatisticProduct = () => {
   const [dateRange, setDateRange] = useState([])
   const [search, setSearch] = useState('')
 
+  const [data, setData] = useState([])
+  const [totalItems, setTotalItems] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+
+  const columns = [
+    {
+      title: 'Tên sản phẩm',
+      dataIndex: 'name',
+      // render: (value) => <div>{value}</div>,
+    },
+
+    {
+      title: 'Lượt bán',
+      dataIndex: 'sold',
+      sorter: (a, b) => a.sold - b.sold,
+    },
+  ]
+
   const handleStatisticTypeChange = (value) => {
     setStatisticType(value)
     setProductId(null)
@@ -33,6 +52,23 @@ const StatisticProduct = () => {
     setExpenseData([])
     setSaleData([])
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const res = await orderService.getSoldProductMax(page, pageSize)
+        console.log('soldMax', res.data)
+        setData(res.data.items)
+        setTotalItems(res.data?.totalItems)
+      } catch (error) {
+        showError(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [page, pageSize])
 
   const handleSearch = (key) => key && key !== search && setSearch(key)
   // const handleSearch = (key) => {
@@ -157,19 +193,32 @@ const StatisticProduct = () => {
 
   return (
     <>
-      <div className="grid sm:grid-cols-6 grid-cols-3 gap-4">
-        <Card className=" shadow-sm" bordered>
-          <Statistic
-            title={<span className=" font-semibold">Sản phẩm</span>}
-            value="11"
-            prefix={
-              <div className="rounded-full bg-orange-200 p-2">
-                <MdAssignmentReturned className="text-2xl  text-orange-500" />
-              </div>
-            }
-          />
-        </Card>
+      <div>
+        <Divider>Sản phẩm bán chạy nhất tháng</Divider>
+        <Table
+          pagination={false}
+          showSorterTooltip={false}
+          loading={loading}
+          columns={columns}
+          dataSource={data}
+          rowKey={(record) => record.id || `${record.name}-${record.sold}`}
+          className="overflow-x-auto"
+        />
+        <Pagination
+          align="end"
+          hideOnSinglePage
+          showSizeChanger
+          // defaultCurrent={page}
+          current={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onChange={(newPage, newPageSize) => {
+            setPage(newPage)
+            setPageSize(newPageSize)
+          }}
+        />
       </div>
+
       <div className="pt-4 flex md:flex-row flex-col space-x-4">
         <Select
           size="large"
