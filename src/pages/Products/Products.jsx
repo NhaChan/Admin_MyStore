@@ -102,15 +102,17 @@ const Products = () => {
           <Link to={`/product-detail/${record.id}`}>
             <Button>Chi tiết</Button>
           </Link>
-          <Popconfirm
-            title={`Xác nhận xóa ${record.name}`}
-            onConfirm={() => handleDelete(record.id)}
-            loading={loadingDelete}
-          >
-            <Button>
-              <DeleteTwoTone />
-            </Button>
-          </Popconfirm>
+          {record.quantity === 0 && (
+            <Popconfirm
+              title={`Xác nhận xóa ${record.name}`}
+              onConfirm={() => handleDelete(record.id)}
+              loading={loadingDelete}
+            >
+              <Button>
+                <DeleteTwoTone />
+              </Button>
+            </Popconfirm>
+          )}
         </Flex>
       ),
     },

@@ -96,7 +96,10 @@ export const privateRoutes = [
 export const StatistRoutes = [
   { path: '/home', component: Home },
   { path: '/statistic', component: StatisticProduct },
+  { path: '/products', component: Products },
+  { path: '/product-detail/:id', component: ProductDetail },
   { path: '/orders', component: Order },
+  { path: '/order-detail/:id', component: OrderDetail },
   { path: '/stock', component: StockReceipt },
 ]
 

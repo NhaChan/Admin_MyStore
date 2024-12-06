@@ -28,9 +28,15 @@ const StatisticProduct = () => {
   const [data, setData] = useState([])
   const [totalItems, setTotalItems] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(3)
 
   const columns = [
+    {
+      align: 'center',
+      title: 'Mã sản phẩm',
+      dataIndex: 'id',
+      render: (value) => <div>#{value}</div>,
+    },
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
@@ -38,6 +44,7 @@ const StatisticProduct = () => {
     },
 
     {
+      align: 'center',
       title: 'Lượt bán',
       dataIndex: 'sold',
       sorter: (a, b) => a.sold - b.sold,
