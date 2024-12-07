@@ -1,6 +1,6 @@
-import { DatePicker, Divider, InputNumber, Pagination, Select, Spin, Table } from 'antd'
+import { DatePicker, Divider, Image, InputNumber, Pagination, Select, Spin, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { formatDate, showError } from '../../services/commonService'
+import { formatDate, showError, toImageLink } from '../../services/commonService'
 import statisticService from '../../services/statisticService'
 import MonthYearStatistic from '../../components/Charts/ChartMonthYear'
 import productService from '../../services/products/productService'
@@ -36,6 +36,12 @@ const StatisticProduct = () => {
       title: 'Mã sản phẩm',
       dataIndex: 'id',
       render: (value) => <div>#{value}</div>,
+    },
+    {
+      align: 'center',
+      title: 'Hình ảnh',
+      dataIndex: 'description',
+      render: (value) => <Image style={{ maxWidth: 50, minWidth: 20 }} src={toImageLink(value)} />,
     },
     {
       title: 'Tên sản phẩm',

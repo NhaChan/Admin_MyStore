@@ -182,8 +182,8 @@ const Home = () => {
 
     // Gom dữ liệu doanh thu theo ngày và tính tổng cho mỗi ngày
     const saleByDate = saleData.reduce((acc, item) => {
-      if (item.dateReceived) {
-        const date = item.dateReceived.split('T')[0] // Chỉ lấy phần ngày
+      if (item.orderDate) {
+        const date = item.orderDate.split('T')[0] // Chỉ lấy phần ngày
         if (!acc[date]) {
           acc[date] = { total: 0 }
         }
