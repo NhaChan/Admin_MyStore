@@ -41,8 +41,8 @@ const saleColumns = [
     dataIndex: 'id',
   },
   {
-    title: 'Ngày nhận hàng',
-    dataIndex: 'dateReceived',
+    title: 'Ngày đặt hàng',
+    dataIndex: 'orderDate',
     render: (value, record) => (value ? formatDate(value) : record.month + '/' + record.year),
   },
   {
@@ -411,6 +411,7 @@ const Home = () => {
             onChange={handleDateRangeChange}
             locale={locale}
             style={{ width: '50%' }}
+            disabledDate={(current) => current && current.valueOf() > Date.now()}
           />
           {isDateRangeSelected && (
             <ChartDate

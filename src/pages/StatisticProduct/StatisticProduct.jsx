@@ -279,6 +279,7 @@ const StatisticProduct = () => {
               onChange={handleDateRangeChange}
               format="YYYY-MM-DD"
               size="large"
+              disabledDate={(current) => current && current.valueOf() > Date.now()}
             />
             {isDateRangeSelected && (
               <ChartDateProduct
